@@ -1,0 +1,13 @@
+12:54:12.970 - start thread marvinShares
+12:54:13.597 - open servo types file c:/projekte/inmoov/marvinData/servoTypeDefinitions.json
+12:54:13.601 - open servo types file c:/projekte/inmoov/marvinData/servoTypeDefinitions.json
+12:54:13.606 - servoTypeDict loaded
+12:54:13.606 - open servo definitions file c:/projekte/inmoov/robotControl/servoStaticDefinitions.json
+12:54:13.646 - create servoDerivedDict
+12:54:13.660 - load last known servo positions
+12:54:13.673 - servoPositions loaded
+12:54:13.680 - marvinData initialized
+12:54:13.684 - start updateQueue thread
+12:54:13.685 - marvinData: shareManager instanciated
+12:54:13.685 - marvinData: registered, wait for shared data update requests
+12:54:13.686 - -----------------

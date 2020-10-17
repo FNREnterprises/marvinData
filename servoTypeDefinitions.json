@@ -1,0 +1,57 @@
+{
+ "MG995": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": false,
+  "typeSpeed": 0.15,
+  "typeTorque": 15
+ },
+
+ "MG996R": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": false,
+  "typeSpeed": 0.15,
+  "typeTorque": 15
+ },
+
+ "SG90": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": false,
+  "typeSpeed": 0.12,
+  "typeTorque": 2
+ },
+
+ "HS-805": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": false,
+  "typeSpeed": 0.14,
+  "typeTorque": 25
+ },
+
+ "BMS-L530": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": true,
+  "typeSpeed": 0.12,
+  "typeTorque": 24
+ },
+
+ "HK-15298": {
+  "typeMinPos": 34,
+  "typeMaxPos": 150,
+  "typeInverted": false,
+  "typeSpeed": 0.15,
+  "typeTorque": 15
+ },
+
+ "SH-0262MG": {
+  "typeMinPos": 0,
+  "typeMaxPos": 180,
+  "typeInverted": false,
+  "typeSpeed": 0.06,
+  "typeTorque": 1.2
+}
+}
