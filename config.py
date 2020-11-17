@@ -1,16 +1,23 @@
 
 import time, datetime
 import logging
+import marvinglobal.marvinglobal as mg
 
 
-SERVO_STATIC_DEFINITIONS_FILE = 'c:/projekte/inmoov/robotControl/servoStaticDefinitions.json'
-SERVO_TYPE_DEFINITIONS_FILE = 'c:/projekte/inmoov/marvinData/servoTypeDefinitions.json'
-PERSISTED_SERVO_POSITIONS_FILE = 'c:/projekte/inmoov/robotControl/persistedServoPositions.json'
+allMarvinTasks = ["skeletonControl", "skeletonGui", "audio"]
 
+processName = 'marvinData'
 persistedServoPositions = {}
 lastPositionSaveTime = time.time()
-marvinData = None
-mg = None
+md = None       # MarvinData object
+share = None
+
+cartStateLocal = mg.State()
+cartLocationLocal = mg.Location()
+cartMovementLocal = mg.Movement
+sensorTestDataLocal = mg.SensorTestData()
+floorOffsetLocal = mg.FloorOffset()
+obstacleDistanceLocal = mg.ObstacleDistance()
 
 def startLogging():
     logging.basicConfig(

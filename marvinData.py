@@ -7,7 +7,11 @@ import simplejson as json
 import threading
 
 from multiprocessing.managers import SyncManager
-from multiprocessing import Queue, Manager
+#from multiprocessing import Queue, Manager
+import multiprocessing
+import subprocess
+import psutil
+
 #from shared_memory_dict import SharedMemoryDict
 import config
 import marvinglobal.marvinglobal as mg
@@ -17,147 +21,60 @@ lastPositionSaveTime = None
 class ShareManager(SyncManager): pass
 
 
+def updateCartGui(type):
+
+    if 'marvinGui' in config.md.processDict.keys():
+        # config.log(f"update skeletonGui {servoName=}")
+        config.md.cartGuiUpdateQueue.put({'type': type})
+
+
+def updateSkeletonGui(type):
+
+    if 'marvinGui' in config.md.processDict.keys():
+        # config.log(f"update skeletonGui {servoName=}")
+        config.md.skeletonGuiUpdateQueue.put({'type': type})
+
+
 class MarvinData():
     "shared ressources in its own process"
     def __init__(self):
         super().__init__()
 
         # shared dictionaries
-        shareManager = Manager()
+        shareManager = multiprocessing.Manager()
 
         self.processDict = shareManager.dict()
-        self.processDict.update({'skeletonControl': {'lastUpdate': 0}})
-
         self.arduinoDict = shareManager.dict()
-        self.arduinoDict.update({0:{'arduinoIndex': 0, 'arduinoName': 'left, lower arduino', 'comPort': 'COM8', 'connected': False}})
-        self.arduinoDict.update({1:{'arduinoIndex': 1, 'arduinoName': 'right, upper arduino', 'comPort': 'COM4', 'connected': False}})
 
-        config.log(f"open servo types file {config.SERVO_TYPE_DEFINITIONS_FILE}")
+        #config.log(f"open servo types file {config.SERVO_TYPE_DEFINITIONS_FILE}")
         self.servoTypeDict = shareManager.dict()
-        self.loadServoTypes()
 
-        config.log(f"open servo definitions file {config.SERVO_STATIC_DEFINITIONS_FILE}")
+        #config.log(f"open servo definitions file {config.SERVO_STATIC_DEFINITIONS_FILE}")
         self.servoStaticDict = shareManager.dict()
-        self.loadServoStaticDefinitions()
 
         config.log(f"create servoDerivedDict")
         self.servoDerivedDict = shareManager.dict()
 
-        for servoName, servoStatic in self.servoStaticDict.items():
-            servoType = self.servoTypeDict[servoStatic.servoType]
-            servoDerived = mg.ServoDerived(servoStatic, servoType)
-            self.servoDerivedDict.update({servoName: servoDerived})
-
         self.servoCurrentDict = shareManager.dict()
-        self.loadServoPositions()
 
+        self.cartDict = shareManager.dict()
+        self.cartDict.update({mg.SharedDataUpdate.CART_STATE: config.cartStateLocal})
+        self.cartDict.update({mg.SharedDataUpdate.SENSOR_TEST_DATA: config.sensorTestDataLocal})
+        self.cartDict.update({mg.SharedDataUpdate.FLOOR_OFFSET: config.floorOffsetLocal})
+        self.cartDict.update({mg.SharedDataUpdate.OBSTACLE_DISTANCE: config.obstacleDistanceLocal})
 
-    def loadServoTypes(self):
-        # servo types
-        config.log(f"open servo types file {config.SERVO_TYPE_DEFINITIONS_FILE}")
-        try:
-            with open(config.SERVO_TYPE_DEFINITIONS_FILE, 'r') as infile:
-                servoTypeDefinitions = json.load(infile)
-            with open(config.SERVO_TYPE_DEFINITIONS_FILE + ".bak", 'w') as outfile:
-                json.dump(servoTypeDefinitions, outfile, indent=2)
+    def saveServoStaticDict(self):
+        '''
+        servoStaticDict is a dict of cServoStatic objects by servoName
+        to store it in json revert the objects back to dictionaries
+        :return:
+        '''
+        servoStaticDefinitions = {}
+        for servoName, servoObject in self.servoStaticDict.items():
+            servoStaticDefinitions.update({servoName: servoObject.__dict__})
 
-        except Exception as e:
-            config.log(f"missing {config.SERVO_TYPE_DEFINITIONS_FILE} file, try using the backup file")
-            os._exit(3)
-
-        for servoTypeName, servoTypeData in servoTypeDefinitions.items():
-            servoType = mg.ServoType(servoTypeData)   # inst of servoTypeData class
-            self.servoTypeDict.update({servoTypeName: servoType})
-
-        config.log(f"servoTypeDict loaded")
-
-
-    def loadServoStaticDefinitions(self):
-
-        try:
-            with open(config.SERVO_STATIC_DEFINITIONS_FILE, 'r') as infile:
-                servoStaticDefinitions = json.load(infile)
-            # if successfully read create a backup just in case
-            with open(config.SERVO_STATIC_DEFINITIONS_FILE + ".bak", 'w') as outfile:
-                json.dump(servoStaticDefinitions, outfile, indent=2)
-
-        except Exception as e:
-            config.log(f"missing {config.SERVO_STATIC_DEFINITIONS_FILE} file, try using the backup file")
-            os._exit(2)
-
-        for servoName in servoStaticDefinitions:
-            servoStatic = mg.ServoStatic(servoStaticDefinitions[servoName])
-            servoType = self.servoTypeDict[servoStatic.servoType]
-
-            # data cleansing
-            # BE AWARE: inversion is handled in the arduino only, maxPos > minPos is a MUST!
-            # check for valid min/max position values in servo type definition
-            if servoType.typeMaxPos < servoType.typeMinPos:
-                config.log(f"wrong servo type values, typeMaxPos < typeMinPos, servo disabled")
-                servoStatic.enabled = False
-
-            # check for valid min/max degree values in servo definition
-            if servoStatic.maxDeg < servoStatic.minDeg:
-                config.log(f"wrong servo min/max values, maxDeg < minDeg for {servoName}, servo disabled")
-                servoStatic.enabled = False
-
-            # check for servo values in range of servo type definition
-            if servoStatic.minPos < servoType.typeMinPos:
-                config.log(f"servo min pos lower than servo type min pos for {servoName}, servo min pos adjusted")
-                servoStatic.minPos = servoType.typeMinPos
-
-            if servoStatic.maxPos > servoType.typeMaxPos:
-                config.log(f"servo max pos higher than servo type max pos for {servoName}, servo max pos adjusted")
-                servoStatic.maxPos = servoType.typeMaxPos
-
-            # add object to the servoStaticDict
-            self.servoStaticDict.update({servoName: servoStatic})
-
-
-    def loadServoPositions(self):
-
-        #global persistedServoPositions, servoCurrentDict
-
-        config.log("load last known servo positions")
-        if os.path.isfile(config.PERSISTED_SERVO_POSITIONS_FILE):
-            with open(config.PERSISTED_SERVO_POSITIONS_FILE, 'r') as infile:
-                config.persistedServoPositions = json.load(infile)
-                if len(config.persistedServoPositions) != len(self.servoStaticDict):
-                    config.log(f"mismatch of servoDict and persistedServoPositions")
-                    createPersistedDefaultServoPositions()
-        else:
-            createPersistedDefaultServoPositions()
-
-        # check for valid persisted position
-        for servoName in self.servoStaticDict:
-
-            servoStatic: mg.ServoStatic = self.servoStaticDict[servoName]
-
-            # try to assign the persisted last known servo position
-            try:
-                p = config.persistedServoPositions[servoName]
-            except KeyError:
-                # in case we do not have a last known servo position use 90 as default
-                p = 90
-
-            # set current position to min or max if outside range
-            if p < servoStatic.minPos:
-                p = servoStatic.minPos
-            if p > servoStatic.maxPos:
-                p = servoStatic.maxPos
-
-            # create cServoCurrent object
-            servoCurrent = mg.ServoCurrent(servoName)
-
-            servoCurrent.position = p
-
-            # set degrees from pos
-            #servoCurrent.degrees = mg.evalDegFromPos(servoName, p)
-
-            # add object to servoCurrentDict with key servoName
-            self.servoCurrentDict.update({servoName: servoCurrent})
-
-        config.log("servoPositions loaded")
+        with open(mg.SERVO_STATIC_DEFINITIONS_FILE, 'w') as outfile:
+            json.dump(servoStaticDefinitions, outfile, indent=2)
 
 
     def getProcessDict(self):
@@ -181,6 +98,8 @@ class MarvinData():
     def getServoCurrentDict(self):
         return self.servoCurrentDict
 
+    def getCartDict(self):
+        return self.cartDict
 
     def run(self):
         # register the shared dicts
@@ -191,69 +110,144 @@ class MarvinData():
         ShareManager.register('getServoDerivedDict', self.getServoDerivedDict)
         ShareManager.register('getServoCurrentDict', self.getServoCurrentDict)
 
+        ShareManager.register('getCartDict', self.getCartDict)
+
         # register the shared queues
-        self.dictUpdateQueue = Queue()
-        ShareManager.register('getDictUpdateQueue', callable=lambda: self.dictUpdateQueue)
+        self.sharedDataUpdateQueue = multiprocessing.Queue()
+        ShareManager.register('getSharedDataUpdateQueue', callable=lambda: self.sharedDataUpdateQueue)
 
-        self.guiUpdateQueue = Queue()
-        ShareManager.register('getGuiUpdateQueue', callable=lambda: self.guiUpdateQueue)
+        self.ikUpdateQueue = multiprocessing.Queue()
+        ShareManager.register('getIkUpdateQueue', callable=lambda: self.ikUpdateQueue)
 
-        self.servoRequestQueue = Queue()
+        self.skeletonGuiUpdateQueue = multiprocessing.Queue()
+        ShareManager.register('getSkeletonGuiUpdateQueue', callable=lambda: self.skeletonGuiUpdateQueue)
+
+        self.cartGuiUpdateQueue = multiprocessing.Queue()
+        ShareManager.register('getCartGuiUpdateQueue', callable=lambda: self.cartGuiUpdateQueue)
+
+        self.servoRequestQueue = multiprocessing.Queue()
         ShareManager.register('getServoRequestQueue', callable=lambda: self.servoRequestQueue)
 
-        self.speakRequestQueue = Queue()
+        self.cartRequestQueue = multiprocessing.Queue()
+        ShareManager.register('getCartRequestQueue', callable=lambda: self.cartRequestQueue)
+
+        self.speakRequestQueue = multiprocessing.Queue()
         ShareManager.register('getSpeakRequestQueue', callable=lambda:self.speakRequestQueue)
-        self.speakRespondQueue = Queue()
+        self.speakRespondQueue = multiprocessing.Queue()
         ShareManager.register('getSpeakRespondQueue', callable=lambda:self.speakRespondQueue)
 
-        self.imageProcessingQueue = Queue()
+        self.imageProcessingQueue = multiprocessing.Queue()
         ShareManager.register('getImageProcessingQueue', callable=lambda: self.imageProcessingQueue)
 
 
         # start thread for updating the dicts
-        config.log(f"start updateQueue thread")
-        updateRequestsThread = threading.Thread(name="updateRequests", target=self.updateRequests, args={})
+        config.log(f"start shareDataUpdateQueue thread")
+        updateRequestsThread = threading.Thread(name="sharedDataUpdateRequests", target=self.sharedDataUpdateRequests, args={})
         updateRequestsThread.start()
 
         try:
-            m = ShareManager(address=('', 50000), authkey=b'marvin')
-            config.log(f"marvinData: shareManager instanciated")
-            s = m.get_server()
+            self.m = ShareManager(address=('', mg.SHARED_DATA_PORT), authkey=b'marvin')
+            config.log(f"marvinData: shareManager instanciated, {mg.SHARED_DATA_PORT=}")
+            self.s = self.m.get_server()
             config.log(f"marvinData: registered, wait for shared data update requests")
             config.log(f"-----------------")
-            s.serve_forever()
+            self.s.serve_forever()
 
         except Exception as e:
             config.log(f"marvin shares problem, {e}")
-            m.shutdown()
+            os._exit(0)
 
 
     # thread to handle updates
-    def updateRequests(self):
+    def sharedDataUpdateRequests(self):
+        # as of python 3.8 we can not update a shared object
+        # instead create a dict from the current objects values
+        # update this dict with the new values passed in as dict
+        # update the object with the new values of this dict
+        # replace the object in the shared dict with the updated object
         while True:
 
+            stmt = "self.sharedDataUpdateQueue.get()"
             try:
                 # as with python 3.7 a shared (proxied) nested dict can not directly be updated
                 # - copy the existing subDict into a local dict
                 # - update the local dict
                 # - replace whole subDict with updated dict
-                stmt = self.dictUpdateQueue.get()
+                stmt = self.sharedDataUpdateQueue.get()
+                #print(f"{stmt=}")
+                updType = stmt[0]
 
-                if 'processDict' in stmt[0]:
-                    self.processDict[stmt[1]] = stmt[2]
+                if updType == mg.SharedDataUpdate.PROCESS:
+                    # ("processDict", processName, {'lastUpdate': time.time()})
+                    # ("processDict", processName, {'remove': True})
 
-                elif 'arduinoDict' in stmt[0]:
-                    curr = self.arduinoDict[stmt[1]]
-                    curr.update(stmt[2])
-                    self.arduinoDict[stmt[1]] = curr
+                    processName = stmt[1]
+                    updStmt = stmt[2]
 
-                elif 'servoCurrentDict' in stmt[0]:
-                    # as of python 3.8 we can not update a shared object
-                    # instead create a dict from the current objects values
-                    # update this dict with the new values passed in as dict
-                    # update the object with the new values of this dict
-                    # replace the object in the shared dict with the updated object
+                    if 'remove' in updStmt:
+                        try:
+                            del self.processDict[processName]
+                        except KeyError:
+                            config.log(f"removal of process requested that is not in the processDict:{processName}")
+                    else:
+                        if processName in self.processDict.keys():
+                            curr = self.processDict[processName]
+                            curr.update(updStmt)
+                        else:
+                            curr = updStmt
+                        self.processDict[processName] = curr
+
+                elif updType == mg.SharedDataUpdate.ARDUINO:
+                    arduino = stmt[1]
+                    updStmt = stmt[2]
+                    if arduino in self.arduinoDict.keys():
+                        curr = self.arduinoDict[arduino]
+                        curr.update(updStmt)
+                    else:
+                        curr = updStmt
+                    self.arduinoDict[arduino] = curr
+
+                    if 'marvinGui' in config.md.processDict.keys():
+                        info = {'type': mg.SharedDataUpdate.ARDUINO, 'arduino': curr, 'connected': True}
+                        #config.log(f"update skeletonGui {info}")
+                        config.md.skeletonGuiUpdateQueue.put(info)
+
+
+                elif updType == mg.SharedDataUpdate.SERVO_TYPE:
+
+                    servoTypeName = stmt[1]
+
+                    newServoType:mg.ServoType = mg.ServoType(stmt[2])
+                    #self.servoTypeDict[servoType] = newServoType
+                    self.servoTypeDict.update({servoTypeName: newServoType})
+
+
+                elif updType == mg.SharedDataUpdate.SERVO_STATIC:
+                    
                     servoName = stmt[1]
+
+                    newServoStatic: mg.ServoStatic = mg.ServoStatic(stmt[2])
+                    self.servoStaticDict[servoName] = newServoStatic
+
+                    # update derived servo values too
+                    servoType = self.servoTypeDict[newServoStatic.servoType]
+                    newServoDerived = mg.ServoDerived(newServoStatic, servoType)
+                    self.servoDerivedDict[servoName] = newServoDerived
+
+
+                    # update skeleton gui if running
+                    if 'marvinGui' in config.md.processDict.keys():
+                        #config.log(f"update skeletonGui {servoName=}")
+                        config.md.skeletonGuiUpdateQueue.put({'type': mg.SharedDataUpdate.SERVO_CURRENT, 'servoName': servoName})
+
+
+                elif updType == mg.SharedDataUpdate.SERVO_CURRENT:
+                    # this can be a partial update request and the dict may not contain the servo yet
+                    servoName = stmt[1]
+                    if servoName not in self.servoCurrentDict.keys():
+                        servoCurrent = mg.ServoCurrent(servoName)
+                        self.servoCurrentDict.update({servoName: servoCurrent})
+
                     existingServoCurrentAsDict = dict(self.servoCurrentDict[servoName].__dict__)
                     existingServoCurrentAsDict.update(stmt[2])
                     #def updateData(self, newDegrees, newPosition, newAssigned, newMoving, newAttached, newAutoDetach,newVerbose):
@@ -270,71 +264,118 @@ class MarvinData():
                         existingServoCurrentAsDict['timeOfLastMoveRequest'])
 
                     self.servoCurrentDict[servoName] = newServoCurrent
-                    # when move has ended persist the position
-                    if not newServoCurrent.moving:
-                        saveServoPosition(servoName, newServoCurrent.position)
+
+                    # update skeleton gui if running
+                    if 'marvinGui' in config.md.processDict.keys():
+                        #config.log(f"update skeletonGui {servoName=}")
+                        config.md.skeletonGuiUpdateQueue.put({'type': mg.SharedDataUpdate.SERVO_CURRENT, 'servoName': servoName})
+
+                # single instance shared dicts
+                elif updType in [mg.SharedDataUpdate.CART_STATE,
+                                 mg.SharedDataUpdate.CART_LOCATION,
+                                 mg.SharedDataUpdate.CART_MOVEMENT,
+                                 mg.SharedDataUpdate.PLATFORM_IMU,
+                                 mg.SharedDataUpdate.OBSTACLE_DISTANCE]:
+                    #if updType in self.cartDict.keys():
+                    #    config.log(f"before: {updType=}, {self.cartDict[updType]} ")
+                    self.cartDict[updType] = stmt[1]
+                    updateCartGui(updType)
+                    #config.log(f"after:  {updType=}, {self.cartDict[updType]} ")
+
+                elif updType == mg.SharedDataUpdate.HEAD_IMU:
+                    self.cartDict[updType] = stmt[1]
+                    updateSkeletonGui(updType)
+
+                elif updType == mg.SharedDataUpdate.FLOOR_OFFSET:
+                    sensorId = stmt[1]
+
+                    # update the local copy of the dict
+                    config.floorOffsetLocal.distance[sensorId] = stmt[2]
+                    config.floorOffsetLocal.timeStamp[sensorId] = time.time()
+
+                    # then reassign the local dict to the shared DictProxy
+                    self.cartDict.update({mg.SharedDataUpdate.FLOOR_OFFSET: config.floorOffsetLocal})
+                    updateCartGui(updType)
+
+                elif updType == mg.SharedDataUpdate.SENSOR_TEST_DATA:
+
+                    # update the local copy of the dict
+                    config.sensorTestDataLocal = stmt[1]
+
+                    # then reassign the local dict to the shared DictProxy
+                    self.cartDict.update({mg.SharedDataUpdate.SENSOR_TEST_DATA: config.sensorTestDataLocal})
+                    updateCartGui(updType)
+
 
             except Exception as e:
-                config.log(f"error in eval: {stmt}, {e}")
+                config.log(f"error in dict update: {stmt}, {e}")
 
 
 
-def persistServoPositions():
-
-    config.lastPositionSaveTime = time.time()
-    with open(config.PERSISTED_SERVO_POSITIONS_FILE, 'w') as outfile:
-        json.dump(config.persistedServoPositions, outfile, indent=2)
 
 
-def saveServoPosition(servoName, position, maxDelay=10):
-    '''
-    save current servo position to json file if last safe time differs
-    more than maxDelay seconds
-    :param servoName:
-    :param position:
-    :param maxDelay:
+
+
+def cleanup():
+
+    for process in psutil.process_iter():
+        try:
+            # find processes started with debugger too
+            if 'python' in process.cmdline()[0]:
+                for processName in config.allMarvinTasks:
+                    if processName in ''.join(process.cmdline()):
+                        print(f'stop {processName}')
+                        process.kill()
+
+        except Exception as e:  # some processes do not allow inquiries
+            pass
+
+
+def startServer(server):
+    """
+    starts the server <server> by calling the batch file f"c:/projekte/inmoov/start_{server}.bat"
+    :param server:
     :return:
-    '''
-
-    config.persistedServoPositions[servoName] = position
-    if time.time() - config.lastPositionSaveTime > maxDelay:
-        persistServoPositions()
-
-
-def createPersistedDefaultServoPositions():
-    '''
-    initialize default servo positions in case of missing or differing json file
-    :return:
-    '''
-
-    config.persistedServoPositions = {}
-    for servoName in config.md.servoStaticDict:
-        config.persistedServoPositions.update({servoName: 90})
-    persistServoPositions()
-
+    """
+    print(f"{time.time()} - restart server {server}")
+    serverBatch = f"c:/projekte/inmoov/start_{server}.bat"
+    print(f"{time.time()} - subprocess.call({serverBatch})")
+    try:
+        subprocess.call(serverBatch)
+        return True
+    except Exception as e:
+        print(f"start server {server} failed, {e}")
+        return False
 
 
 if __name__ == "__main__":
 
-    config.mg = mg.MarvinGlobal()
+    # when start/restart of marvinData happens
+    cleanup()
+
+    config.share = mg.MarvinShares()
 
     config.startLogging()
 
-    config.log("start thread marvinShares")
-    config.marvinData = MarvinData()
+    config.md = MarvinData()
+    config.cc = mg.CartCommands()
 
     # eval degrees from pos after creating an instance of MarvinData
-    for servoName, servoCurrent in config.marvinData.servoCurrentDict.items():
-        servoDerived = config.marvinData.servoDerivedDict[servoName]
-        servoStatic = config.marvinData.servoStaticDict[servoName]
+    for servoName, servoCurrent in config.md.servoCurrentDict.items():
+        servoDerived = config.md.servoDerivedDict[servoName]
+        servoStatic = config.md.servoStaticDict[servoName]
         p = servoCurrent.position
         servoCurrent.degrees = mg.evalDegFromPos(servoStatic, servoDerived, p)
 
     config.log("marvinData initialized")
-    config.marvinData.run()
+    config.md.run()
+
+    # startServer works only for running tasks in run mode (no debugging)
+    # for process in config.allMarvinTasks:
+    #    startServer(process)
+    # during development you might want to start tasks through the pycharm ide
 
     config.log("marvinData stopped")
-
 
 
 
