@@ -2,7 +2,8 @@
 import time, datetime
 import logging
 import marvinglobal.marvinglobal as mg
-
+import marvinglobal.cartClasses
+import marvinglobal.servoClasses as servoCls
 
 allMarvinTasks = ["skeletonControl", "skeletonGui", "audio"]
 
@@ -12,12 +13,14 @@ lastPositionSaveTime = time.time()
 md = None       # MarvinData object
 share = None
 
-cartStateLocal = mg.State()
-cartLocationLocal = mg.Location()
-cartMovementLocal = mg.Movement
-sensorTestDataLocal = mg.SensorTestData()
-floorOffsetLocal = mg.FloorOffset()
-obstacleDistanceLocal = mg.ObstacleDistance()
+cartStateLocal = marvinglobal.cartClasses.State()
+cartLocationLocal = marvinglobal.cartClasses.Location()
+cartMovementLocal = marvinglobal.cartClasses.Movement
+sensorTestDataLocal = marvinglobal.cartClasses.SensorTestData()
+floorOffsetLocal = [marvinglobal.cartClasses.FloorOffset() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
+
+obstacleDistanceLocal = marvinglobal.cartClasses.ObstacleDistance()
+irSensorReferenceDistanceLocal = [marvinglobal.cartClasses.IrSensorReferenceDistance() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
 
 def startLogging():
     logging.basicConfig(
