@@ -189,6 +189,9 @@ class MarvinData:
                     if 'remove' in updStmt:
                         try:
                             del self.processDict[processName]
+                            #if 'marvinGui' in self.processDict.keys():
+                            #    self.cartGuiUpdateQueue.put()
+
                         except KeyError:
                             config.log(f"removal of process requested that is not in the processDict:{processName}")
                     else:
@@ -304,14 +307,16 @@ class MarvinData:
 
                 elif updType == mg.SharedDataItem.FLOOR_OFFSET:
                     sensorId = stmt[1]
+                    step = stmt[2]
 
                     # update the local copy of the dict
-                    config.floorOffsetLocal[sensorId].offset = stmt[2]
+                    config.floorOffsetLocal[sensorId].obstacleHeight[step] = stmt[3]
+                    config.floorOffsetLocal[sensorId].abyssDepth[step] = stmt[4]
                     config.floorOffsetLocal[sensorId].lastUpdate = time.time()
 
                     # then reassign the local dict to the shared DictProxy
                     self.cartDict.update({mg.SharedDataItem.FLOOR_OFFSET: config.floorOffsetLocal})
-                    updateCartGui(updType)
+                    #updateCartGui(updType) updateGui request from cartControl when all sensors have been queried
 
 
                 else:
