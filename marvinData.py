@@ -2,6 +2,7 @@
 marvinData maintains the global data used in the InMoov control
 """
 import os
+import sys
 import time
 import simplejson as json
 import threading
@@ -13,12 +14,11 @@ import multiprocessing
 import subprocess
 import psutil
 
-#from shared_memory_dict import SharedMemoryDict
 import config
-import marvinglobal.marvinglobal as mg
-import marvinglobal.cartCommandMethods as cc
-import marvinglobal.servoClasses as servoCls
-import marvinglobal.marvinShares as share
+
+from marvinglobal import marvinglobal as mg
+from marvinglobal import servoClasses
+from marvinglobal import marvinShares
 
 lastPositionSaveTime = None
 
@@ -203,17 +203,17 @@ class MarvinData:
                         self.processDict[processName] = curr
 
                 elif updType == mg.SharedDataItem.ARDUINO:
-                    arduino = stmt[1]
+                    arduinoIndex = stmt[1]
                     updStmt = stmt[2]
-                    if arduino in self.arduinoDict.keys():
-                        curr = self.arduinoDict[arduino]
+                    if arduinoIndex in self.arduinoDict.keys():
+                        curr = self.arduinoDict[arduinoIndex]
                         curr.update(updStmt)
                     else:
                         curr = updStmt
-                    self.arduinoDict[arduino] = curr
+                    self.arduinoDict[arduinoIndex] = curr
 
                     if 'marvinGui' in config.md.processDict.keys():
-                        info = {'msgType': mg.SharedDataItem.ARDUINO, 'arduino': curr, 'connected': True}
+                        info = {'msgType': mg.SharedDataItem.ARDUINO, 'arduinoIndex': arduinoIndex, 'connected': True}
                         #config.log(f"update skeletonGui {info}")
                         config.md.skeletonGuiUpdateQueue.put(info)
 
@@ -222,7 +222,7 @@ class MarvinData:
 
                     servoTypeName = stmt[1]
 
-                    newServoType:servoCls.ServoType = servoCls.ServoType(stmt[2])
+                    newServoType:servoClasses.ServoType = servoClasses.ServoType(stmt[2])
                     #self.servoTypeDict[servoType] = newServoType
                     self.servoTypeDict.update({servoTypeName: newServoType})
 
@@ -231,12 +231,12 @@ class MarvinData:
                     
                     servoStaticName = stmt[1]
 
-                    newServoStatic: servoCls.ServoStatic = servoCls.ServoStatic(stmt[2])
+                    newServoStatic: servoClasses.ServoStatic = servoClasses.ServoStatic(stmt[2])
                     self.servoStaticDict[servoStaticName] = newServoStatic
 
                     # update derived servo values too
                     servoType = self.servoTypeDict[newServoStatic.servoType]
-                    newServoDerived = servoCls.ServoDerived(newServoStatic, servoType)
+                    newServoDerived = servoClasses.ServoDerived(newServoStatic, servoType)
                     self.servoDerivedDict[servoStaticName] = newServoDerived
 
 
@@ -247,16 +247,17 @@ class MarvinData:
 
 
                 elif updType == mg.SharedDataItem.SERVO_CURRENT:
+
                     # this can be a partial update request and the dict may not contain the servo yet
                     servoCurrentName = stmt[1]
-                    if servoName not in self.servoCurrentDict.keys():
-                        servoCurrent = servoCls.ServoCurrent(servoCurrentName)
+                    if servoCurrentName not in self.servoCurrentDict.keys():
+                        servoCurrent = servoClasses.ServoCurrent()
                         self.servoCurrentDict.update({servoCurrentName: servoCurrent})
 
                     existingServoCurrentAsDict = dict(self.servoCurrentDict[servoCurrentName].__dict__)
                     existingServoCurrentAsDict.update(stmt[2])
                     #def updateData(self, newDegrees, newPosition, newAssigned, newMoving, newAttached, newAutoDetach,newVerbose):
-                    newServoCurrent = servoCls.ServoCurrent(servoCurrentName)
+                    newServoCurrent = servoClasses.ServoCurrent()
                     newServoCurrent.updateData(
                         existingServoCurrentAsDict['degrees'],
                         existingServoCurrentAsDict['position'],
@@ -273,7 +274,7 @@ class MarvinData:
                     # update skeleton gui if running
                     if 'marvinGui' in config.md.processDict.keys():
                         #config.log(f"update skeletonGui {servoName=}")
-                        config.md.skeletonGuiUpdateQueue.put({'msgType': mg.SharedDataItem.SERVO_CURRENT, 'servoName': servoName})
+                        config.md.skeletonGuiUpdateQueue.put({'msgType': mg.SharedDataItem.SERVO_CURRENT, 'servoName': servoCurrentName})
 
 
                 # single instance shared cart dicts
@@ -295,7 +296,9 @@ class MarvinData:
 
                 elif updType == mg.SharedDataItem.IR_SENSOR_REFERENCE_DISTANCE:
 
-                    config.log(f"IR_SENSOR_REFERENCE_DISTANCE {stmt}")
+                    if config.logFlags.irSensor:
+                        config.log(f"IR_SENSOR_REFERENCE_DISTANCE {stmt}")
+
                     sensorId = stmt[1]
 
                     # update the local copy of the dict
@@ -306,6 +309,7 @@ class MarvinData:
 
 
                 elif updType == mg.SharedDataItem.FLOOR_OFFSET:
+                    # (mg.SharedDataItem.FLOOR_OFFSET, sensorId, step, obstacleHeight, abyssDepth)
                     sensorId = stmt[1]
                     step = stmt[2]
 
@@ -323,7 +327,8 @@ class MarvinData:
                     config.log(f"unknown updType {stmt}")
 
             except Exception as e:
-                config.log(f"error in dict update: {stmt}, {e}")
+                xc_type, exc_obj, exc_tb = sys.exc_info()
+                config.log(f"error in dict update: {stmt}, {exc_tb.tb_lineno}, {e}")
 
 
 
@@ -364,12 +369,12 @@ if __name__ == "__main__":
     # when start/restart of marvinData happens
     cleanup()
 
-    config.share = share.MarvinShares()
+    config.share = marvinShares.MarvinShares()
 
     config.startLogging()
 
     config.md = MarvinData()
-    config.cc = cc.CartCommandMethods()
+    #config.cc = cartCommandMethods.CartCommandMethods()
 
     # eval degrees from pos after creating an instance of MarvinData
     for servoName, servoCurrent in config.md.servoCurrentDict.items():

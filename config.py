@@ -1,9 +1,10 @@
 
 import time, datetime
 import logging
-import marvinglobal.marvinglobal as mg
-import marvinglobal.cartClasses
-import marvinglobal.servoClasses as servoCls
+
+from marvinglobal import marvinglobal as mg
+from marvinglobal import cartClasses
+
 
 allMarvinTasks = ["skeletonControl", "skeletonGui", "audio"]
 
@@ -13,14 +14,24 @@ lastPositionSaveTime = time.time()
 md = None       # MarvinData object
 share = None
 
-cartStateLocal = marvinglobal.cartClasses.State()
-cartLocationLocal = marvinglobal.cartClasses.Location()
-cartMovementLocal = marvinglobal.cartClasses.Movement
-sensorTestDataLocal = marvinglobal.cartClasses.SensorTestData()
-floorOffsetLocal = [marvinglobal.cartClasses.FloorOffset() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
+cartStateLocal = cartClasses.State()
+cartLocationLocal = cartClasses.Location()
+cartMovementLocal = cartClasses.Movement
+sensorTestDataLocal = cartClasses.SensorTestData()
+floorOffsetLocal = [cartClasses.FloorOffset() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
 
-obstacleDistanceLocal = marvinglobal.cartClasses.ObstacleDistance()
-irSensorReferenceDistanceLocal = [marvinglobal.cartClasses.IrSensorReferenceDistance() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
+obstacleDistanceLocal = cartClasses.ObstacleDistance()
+irSensorReferenceDistanceLocal = [cartClasses.IrSensorReferenceDistance() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
+
+class LogFlags:
+    def __init__(self):
+        self.irSensor = True
+
+    def clear(self):
+        self.irSensor = False
+
+logFlags = LogFlags()
+
 
 def startLogging():
     logging.basicConfig(
