@@ -38,7 +38,7 @@
     "typeMinPos": 34,
     "typeMaxPos": 150,
     "typeInverted": false,
-    "typeSpeed": 0.15,
+    "typeSpeed": 0.1,
     "typeTorque": 15
   },
   "SH-0262MG": {

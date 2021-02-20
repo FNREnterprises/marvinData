@@ -1,6 +1,84 @@
-10:50:37.916 - create servoDerivedDict
-10:50:37.932 - marvinData initialized
-10:50:37.932 - start shareDataUpdateQueue thread
-10:50:37.933 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
-10:50:37.933 - marvinData: registered, wait for shared data update requests
-10:50:37.934 - -----------------
+13:53:02.254 - create servoDerivedDict
+13:53:02.268 - marvinData initialized
+13:53:02.268 - start shareDataUpdateQueue thread
+13:53:02.268 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
+13:53:02.269 - marvinData: registered, wait for shared data update requests
+13:53:02.269 - -----------------
+13:53:17.993 - servoName='leftArm.rotate' now inRequestList
+13:53:17.995 - servoName='leftArm.shoulder' now inRequestList
+13:53:17.998 - servoName='leftArm.bicep' now inRequestList
+13:53:17.999 - servoName='leftArm.omoplate' now inRequestList
+13:53:18.000 - servoName='leftHand.thumb' now inRequestList
+13:53:18.000 - servoName='leftHand.index' now inRequestList
+13:53:18.001 - servoName='leftHand.majeure' now inRequestList
+13:53:18.001 - servoName='leftHand.ringFinger' now inRequestList
+13:53:18.002 - servoName='leftHand.pinky' now inRequestList
+13:53:18.002 - servoName='leftHand.wrist' now inRequestList
+13:53:18.003 - servoName='head.eyeX' now inRequestList
+13:53:18.004 - servoName='head.eyeY' now inRequestList
+13:53:18.004 - servoName='head.rothead' now inRequestList
+13:53:18.005 - servoName='head.neck' now inRequestList
+13:53:20.672 - servoName='rightArm.bicep' now inRequestList
+13:53:20.674 - servoName='rightArm.rotate' now inRequestList
+13:53:20.677 - servoName='rightArm.shoulder' now inRequestList
+13:53:20.677 - servoName='rightArm.omoplate' now inRequestList
+13:53:20.677 - servoName='rightHand.thumb' now inRequestList
+13:53:20.678 - servoName='rightHand.index' now inRequestList
+13:53:20.678 - servoName='rightHand.majeure' now inRequestList
+13:53:20.679 - servoName='rightHand.ringFinger' now inRequestList
+13:53:20.679 - servoName='rightHand.pinky' now inRequestList
+13:53:20.679 - servoName='rightHand.wrist' now inRequestList
+13:53:20.863 - servoName='leftArm.rotate' not inRequestList any more
+13:53:20.868 - servoName='leftArm.shoulder' not inRequestList any more
+13:53:20.987 - servoName='leftArm.bicep' not inRequestList any more
+13:53:20.991 - servoName='leftArm.omoplate' not inRequestList any more
+13:53:21.113 - servoName='leftHand.thumb' not inRequestList any more
+13:53:21.118 - servoName='leftHand.index' not inRequestList any more
+13:53:21.238 - servoName='leftHand.majeure' not inRequestList any more
+13:53:21.242 - servoName='leftHand.ringFinger' not inRequestList any more
+13:53:21.367 - servoName='leftHand.pinky' not inRequestList any more
+13:53:21.372 - servoName='leftHand.wrist' not inRequestList any more
+13:53:21.490 - servoName='head.eyeX' not inRequestList any more
+13:53:21.494 - servoName='head.eyeY' not inRequestList any more
+13:53:21.617 - servoName='head.rothead' not inRequestList any more
+13:53:21.623 - servoName='head.neck' not inRequestList any more
+13:53:21.687 - servoName='rightArm.bicep' not inRequestList any more
+13:53:21.820 - servoName='rightArm.rotate' not inRequestList any more
+13:53:21.825 - servoName='rightArm.shoulder' not inRequestList any more
+13:53:21.931 - servoName='rightArm.omoplate' not inRequestList any more
+13:53:21.938 - servoName='rightHand.thumb' not inRequestList any more
+13:53:22.073 - servoName='rightHand.index' not inRequestList any more
+13:53:22.080 - servoName='rightHand.majeure' not inRequestList any more
+13:53:22.197 - servoName='rightHand.ringFinger' not inRequestList any more
+13:53:22.204 - servoName='rightHand.pinky' not inRequestList any more
+13:53:22.324 - servoName='rightHand.wrist' not inRequestList any more
+13:54:07.995 - servoName='head.rothead' now inRequestList
+13:54:08.057 - servoName='head.neck' now inRequestList
+13:54:11.164 - servoName='head.rothead' not inRequestList any more
+13:55:54.907 - servoName='head.rothead' now inRequestList
+13:55:58.054 - servoName='head.rothead' not inRequestList any more
+13:56:04.395 - servoName='rightHand.thumb' now inRequestList
+13:56:06.050 - servoName='rightHand.thumb' not inRequestList any more
+14:28:28.117 - servoName='head.rothead' now inRequestList
+14:28:29.480 - servoName='head.neck' not inRequestList any more
+14:28:31.361 - servoName='head.rothead' not inRequestList any more
+14:28:31.659 - servoName='rightHand.thumb' now inRequestList
+14:28:33.277 - servoName='rightHand.thumb' not inRequestList any more
+14:29:40.477 - servoName='head.rothead' now inRequestList
+14:29:40.539 - servoName='head.neck' now inRequestList
+14:29:41.817 - servoName='head.neck' not inRequestList any more
+14:29:43.697 - servoName='head.rothead' not inRequestList any more
+14:29:44.011 - servoName='rightHand.thumb' now inRequestList
+14:29:45.617 - servoName='rightHand.thumb' not inRequestList any more
+14:54:47.936 - servoName='head.rothead' now inRequestList
+14:54:47.998 - servoName='head.neck' now inRequestList
+14:54:49.280 - servoName='head.neck' not inRequestList any more
+14:54:51.162 - servoName='head.rothead' not inRequestList any more
+14:54:51.477 - servoName='rightHand.thumb' now inRequestList
+14:54:53.166 - servoName='rightHand.thumb' not inRequestList any more
+14:55:04.114 - servoName='head.rothead' now inRequestList
+14:55:04.177 - servoName='head.neck' now inRequestList
+14:55:05.459 - servoName='head.neck' not inRequestList any more
+14:55:07.336 - servoName='head.rothead' not inRequestList any more
+14:55:07.652 - servoName='rightHand.thumb' now inRequestList
+14:55:09.341 - servoName='rightHand.thumb' not inRequestList any more

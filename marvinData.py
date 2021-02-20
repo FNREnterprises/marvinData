@@ -17,7 +17,7 @@ import psutil
 import config
 
 from marvinglobal import marvinglobal as mg
-from marvinglobal import servoClasses
+from marvinglobal import skeletonClasses
 from marvinglobal import marvinShares
 
 lastPositionSaveTime = None
@@ -44,6 +44,7 @@ class MarvinData:
     def __init__(self):
         super().__init__()
 
+        self.verbose = False
         # shared dictionaries
         shareManager = multiprocessing.Manager()
         self.m = None
@@ -64,20 +65,25 @@ class MarvinData:
         self.servoCurrentDict = shareManager.dict()
 
         self.cartDict = shareManager.dict()
+        self.cartDict.update({mg.SharedDataItem.CART_CONFIGURATION: config.cartConfigurationLocal})
         self.cartDict.update({mg.SharedDataItem.CART_STATE: config.cartStateLocal})
         self.cartDict.update({mg.SharedDataItem.SENSOR_TEST_DATA: config.sensorTestDataLocal})
         self.cartDict.update({mg.SharedDataItem.FLOOR_OFFSET: config.floorOffsetLocal})
         self.cartDict.update({mg.SharedDataItem.OBSTACLE_DISTANCE: config.obstacleDistanceLocal})
         self.cartDict.update({mg.SharedDataItem.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceLocal})
+        self.cartDict.update({mg.SharedDataItem.HEAD_IMU: config.headImuLocal})
+        self.cartDict.update({mg.SharedDataItem.PLATFORM_IMU: config.platformImuLocal})
 
         self.sharedDataUpdateQueue = multiprocessing.Queue()
         self.ikUpdateQueue = multiprocessing.Queue()
         self.skeletonGuiUpdateQueue = multiprocessing.Queue()
         self.cartGuiUpdateQueue = multiprocessing.Queue()
-        self.servoRequestQueue = multiprocessing.Queue()
+        self.mainGuiUpdateQueue = multiprocessing.Queue()
+        self.skeletonRequestQueue = multiprocessing.Queue()
         self.cartRequestQueue = multiprocessing.Queue()
         self.speakRequestQueue = multiprocessing.Queue()
-        self.speakRespondQueue = multiprocessing.Queue()
+        self.playGestureQueue = multiprocessing.Queue()
+        self.navManagerRequestQueue = multiprocessing.Queue()
         self.imageProcessingQueue = multiprocessing.Queue()
 
 
@@ -93,6 +99,8 @@ class MarvinData:
 
         with open(mg.SERVO_STATIC_DEFINITIONS_FILE, 'w') as outfile:
             json.dump(servoStaticDefinitions, outfile, indent=2)
+
+        if self.verbose: config.log(f"servoStaticDefinitions updated into file")
 
 
     def getProcessDict(self):
@@ -135,10 +143,12 @@ class MarvinData:
         ShareManager.register('getIkUpdateQueue', callable=lambda: self.ikUpdateQueue)
         ShareManager.register('getSkeletonGuiUpdateQueue', callable=lambda: self.skeletonGuiUpdateQueue)
         ShareManager.register('getCartGuiUpdateQueue', callable=lambda: self.cartGuiUpdateQueue)
-        ShareManager.register('getServoRequestQueue', callable=lambda: self.servoRequestQueue)
+        ShareManager.register('getMainGuiUpdateQueue', callable=lambda: self.mainGuiUpdateQueue)
+        ShareManager.register('getSkeletonRequestQueue', callable=lambda: self.skeletonRequestQueue)
         ShareManager.register('getCartRequestQueue', callable=lambda: self.cartRequestQueue)
         ShareManager.register('getSpeakRequestQueue', callable=lambda:self.speakRequestQueue)
-        ShareManager.register('getSpeakRespondQueue', callable=lambda:self.speakRespondQueue)
+        ShareManager.register('getPlayGestureQueue', callable=lambda:self.playGestureQueue)
+        ShareManager.register('getNavManagerRequestQueue', callable=lambda: self.navManagerRequestQueue)
         ShareManager.register('getImageProcessingQueue', callable=lambda: self.imageProcessingQueue)
 
 
@@ -160,7 +170,135 @@ class MarvinData:
             os._exit(0)
 
 
+    def updateProcessDict(self, sender, info):
+
+        # processes are expected to send an update every second
+        processName = info['processName']
+        stateChanged = False
+
+        # processes should check for a request to stop by another process
+        # a process can be stopped by adding a 'remove' key into the messaage
+        if 'remove' in info:
+            # prepare the message for the gui update
+            msg2 = {'cmd': mg.SharedDataItem.PROCESS, 'sender': config.processName,
+                    'info': {'processName': processName, 'running': False}}
+            try:
+                del self.processDict[processName]
+                stateChanged = True
+                if config.logProcessListChanges:
+                    config.log(f"request from {sender} to remove process {processName} from process list")
+                # if 'marvinGui' in self.processDict.keys():
+                #    self.cartGuiUpdateQueue.put()
+            except KeyError:
+                config.log(f"removal of process requested by {sender} that is not in the process list: {processName}")
+        else:
+            # life signal from process
+            if processName in self.processDict.keys():
+                # process already running, update the process dict
+                curr = self.processDict[processName]
+                curr.update(info)
+            else:
+                # new process, create the dict
+                curr = info
+                stateChanged = True
+
+            # update the shared dict by reassigning the local state
+            self.processDict[processName] = curr
+
+            # prepare the message for the gui update
+            msg2 = {'cmd': mg.SharedDataItem.PROCESS, 'sender': config.processName,
+                    'info': {'processName': processName, 'running': True}}
+
+        # update main gui with new process state when gui is running
+        if stateChanged and 'marvinGui' in config.md.processDict.keys():
+            if config.logProcessListChanges: config.log(f"update gui with new process state {msg2['running']}")
+            config.md.mainGuiUpdateQueue.put(msg2)
+
+
+    def updateArduinoDict(self, sender, info):
+
+        arduinoIndex = info['arduinoIndex']
+
+        if arduinoIndex in self.arduinoDict.keys():
+            curr = self.arduinoDict[arduinoIndex]
+            curr.update(info['data'])
+        else:
+            curr = info['data']
+        self.arduinoDict[arduinoIndex] = curr
+
+        if 'marvinGui' in config.md.processDict.keys():
+            msg2 = {'cmd': mg.SharedDataItem.ARDUINO, 'sender': config.processName,
+                    'info': {'arduinoIndex': arduinoIndex, 'connected': True}}
+            # config.log(f"update skeletonGui {info}")
+            config.md.skeletonGuiUpdateQueue.put(msg2)
+
+
+    def updateServoTypeDict(self, sender, info):
+
+        servoTypeName = info['type']
+
+        newServoType: skeletonClasses.ServoType = skeletonClasses.ServoType(info['data'])
+        # self.servoTypeDict[servoType] = newServoType
+        self.servoTypeDict.update({servoTypeName: newServoType})
+
+
+    def updateServoStaticDict(self, sender, info):
+
+        servoStaticName = info['servoName']
+
+        newServoStatic: skeletonClasses.ServoStatic = skeletonClasses.ServoStatic(info['data'])
+        self.servoStaticDict[servoStaticName] = newServoStatic
+
+        #newServoStatic = info['data']
+        self.servoStaticDict[servoStaticName] = newServoStatic
+
+        # update derived servo values too
+        servoType = self.servoTypeDict[newServoStatic.servoType]
+        newServoDerived = skeletonClasses.ServoDerived(newServoStatic, servoType)
+        self.servoDerivedDict[servoStaticName] = newServoDerived
+
+        # save modified static dict to file
+        config.md.saveServoStaticDict()
+
+        # request new assign in skeletonControl when static data was changed by another process
+        if sender != 'skeletonControl':
+            msg2 = {'cmd': 'reassign', 'sender': config.processName,
+                    'info': {'servoName': servoStaticName}}
+            config.md.skeletonRequestQueue.put(msg2)
+
+        # update skeleton gui if running
+        if 'marvinGui' in config.md.processDict.keys():
+            # config.log(f"update skeletonGui {servoName=}")
+            msg = {'cmd': mg.SharedDataItem.SERVO_CURRENT, 'sender': config.processName,
+                   'info': {'servoName': servoStaticName}}
+            config.md.skeletonGuiUpdateQueue.put(msg)
+
+    def updateServoCurrentDict(self, sender, info):
+
+        servoName = info['servoName']
+
+        newServoCurrent = info['data']  # this is always the complete dict now
+
+        if config.logInRequestList and servoName in self.servoCurrentDict:
+            if not self.servoCurrentDict[servoName]['inRequestList'] and newServoCurrent['inRequestList']:
+                config.log(f"{servoName=} now inRequestList")
+
+            if self.servoCurrentDict[servoName]['inRequestList'] and not newServoCurrent['inRequestList']:
+                config.log(f"{servoName=} not inRequestList any more")
+
+        self.servoCurrentDict[servoName] = newServoCurrent
+
+
+        # update skeleton gui if running
+        if 'marvinGui' in config.md.processDict.keys():
+            # config.log(f"update skeletonGui {servoName=}")
+            msg2 = {'cmd': mg.SharedDataItem.SERVO_CURRENT, 'sender': config.processName,
+                    'info': {'servoName': servoName}}
+            config.md.skeletonGuiUpdateQueue.put(msg2)
+
+    ################################################
     # thread to handle updates
+    ################################################
     def sharedDataUpdateRequests(self):
         # as of python 3.8 we can not update a shared object
         # instead create a dict from the current objects values
@@ -169,153 +307,75 @@ class MarvinData:
         # replace the object in the shared dict with the updated object
         while True:
 
-            stmt = "self.sharedDataUpdateQueue.get()"
+            msg = "self.sharedDataUpdateQueue.get()"
             try:
                 # as with python 3.7 a shared (proxied) nested dict can not directly be updated
                 # - copy the existing subDict into a local dict
                 # - update the local dict
                 # - replace whole subDict with updated dict
-                stmt = self.sharedDataUpdateQueue.get()
+                msg = self.sharedDataUpdateQueue.get()
                 #print(f"{stmt=}")
-                updType = stmt[0]
+                #updType = updStmt[0]
+                cmd = msg['cmd']
+                sender = msg['sender']
+                info = msg['info']
 
-                if updType == mg.SharedDataItem.PROCESS:
-                    # ("processDict", processName, {'lastUpdate': time.time()})
-                    # ("processDict", processName, {'remove': True})
+                if cmd == mg.SharedDataItem.PROCESS:
+                    self.updateProcessDict(sender, info)
 
-                    processName = stmt[1]
-                    updStmt = stmt[2]
+                elif cmd == mg.SharedDataItem.ARDUINO:
+                    self.updateArduinoDict(sender, info)
 
-                    if 'remove' in updStmt:
-                        try:
-                            del self.processDict[processName]
-                            #if 'marvinGui' in self.processDict.keys():
-                            #    self.cartGuiUpdateQueue.put()
+                elif cmd == mg.SharedDataItem.SERVO_TYPE:
+                    self.updateServoTypeDict(sender, info)
 
-                        except KeyError:
-                            config.log(f"removal of process requested that is not in the processDict:{processName}")
-                    else:
-                        if processName in self.processDict.keys():
-                            curr = self.processDict[processName]
-                            curr.update(updStmt)
-                        else:
-                            curr = updStmt
-                        self.processDict[processName] = curr
+                elif cmd == mg.SharedDataItem.SERVO_STATIC:
+                    self.updateServoStaticDict(sender, info)
 
-                elif updType == mg.SharedDataItem.ARDUINO:
-                    arduinoIndex = stmt[1]
-                    updStmt = stmt[2]
-                    if arduinoIndex in self.arduinoDict.keys():
-                        curr = self.arduinoDict[arduinoIndex]
-                        curr.update(updStmt)
-                    else:
-                        curr = updStmt
-                    self.arduinoDict[arduinoIndex] = curr
-
-                    if 'marvinGui' in config.md.processDict.keys():
-                        info = {'msgType': mg.SharedDataItem.ARDUINO, 'arduinoIndex': arduinoIndex, 'connected': True}
-                        #config.log(f"update skeletonGui {info}")
-                        config.md.skeletonGuiUpdateQueue.put(info)
-
-
-                elif updType == mg.SharedDataItem.SERVO_TYPE:
-
-                    servoTypeName = stmt[1]
-
-                    newServoType:servoClasses.ServoType = servoClasses.ServoType(stmt[2])
-                    #self.servoTypeDict[servoType] = newServoType
-                    self.servoTypeDict.update({servoTypeName: newServoType})
-
-
-                elif updType == mg.SharedDataItem.SERVO_STATIC:
-                    
-                    servoStaticName = stmt[1]
-
-                    newServoStatic: servoClasses.ServoStatic = servoClasses.ServoStatic(stmt[2])
-                    self.servoStaticDict[servoStaticName] = newServoStatic
-
-                    # update derived servo values too
-                    servoType = self.servoTypeDict[newServoStatic.servoType]
-                    newServoDerived = servoClasses.ServoDerived(newServoStatic, servoType)
-                    self.servoDerivedDict[servoStaticName] = newServoDerived
-
-
-                    # update skeleton gui if running
-                    if 'marvinGui' in config.md.processDict.keys():
-                        #config.log(f"update skeletonGui {servoName=}")
-                        config.md.skeletonGuiUpdateQueue.put({'msgType': mg.SharedDataItem.SERVO_CURRENT, 'servoName': servoStaticName})
-
-
-                elif updType == mg.SharedDataItem.SERVO_CURRENT:
-
-                    # this can be a partial update request and the dict may not contain the servo yet
-                    servoCurrentName = stmt[1]
-                    if servoCurrentName not in self.servoCurrentDict.keys():
-                        servoCurrent = servoClasses.ServoCurrent()
-                        self.servoCurrentDict.update({servoCurrentName: servoCurrent})
-
-                    existingServoCurrentAsDict = dict(self.servoCurrentDict[servoCurrentName].__dict__)
-                    existingServoCurrentAsDict.update(stmt[2])
-                    #def updateData(self, newDegrees, newPosition, newAssigned, newMoving, newAttached, newAutoDetach,newVerbose):
-                    newServoCurrent = servoClasses.ServoCurrent()
-                    newServoCurrent.updateData(
-                        existingServoCurrentAsDict['degrees'],
-                        existingServoCurrentAsDict['position'],
-                        existingServoCurrentAsDict['assigned'],
-                        existingServoCurrentAsDict['moving'],
-                        existingServoCurrentAsDict['attached'],
-                        existingServoCurrentAsDict['autoDetach'],
-                        existingServoCurrentAsDict['verbose'],
-                        existingServoCurrentAsDict['swiping'],
-                        existingServoCurrentAsDict['timeOfLastMoveRequest'])
-
-                    self.servoCurrentDict[servoCurrentName] = newServoCurrent
-
-                    # update skeleton gui if running
-                    if 'marvinGui' in config.md.processDict.keys():
-                        #config.log(f"update skeletonGui {servoName=}")
-                        config.md.skeletonGuiUpdateQueue.put({'msgType': mg.SharedDataItem.SERVO_CURRENT, 'servoName': servoCurrentName})
+                elif cmd == mg.SharedDataItem.SERVO_CURRENT:
+                    self.updateServoCurrentDict(sender, info)
 
 
                 # single instance shared cart dicts
-                elif updType in [mg.SharedDataItem.CART_STATE,
+                elif cmd in [mg.SharedDataItem.CART_CONFIGURATION,
+                                 mg.SharedDataItem.CART_STATE,
                                  mg.SharedDataItem.CART_LOCATION,
                                  mg.SharedDataItem.CART_MOVEMENT,
                                  mg.SharedDataItem.PLATFORM_IMU,
                                  mg.SharedDataItem.OBSTACLE_DISTANCE]:
                     #if updType in self.cartDict.keys():
                     #    config.log(f"before: {updType=}, {self.cartDict[updType]} ")
-                    self.cartDict[updType] = stmt[1]
-                    updateCartGui(updType)
+                    self.cartDict[cmd] = info
+                    updateCartGui(cmd)
                     #config.log(f"after:  {updType=}, {self.cartDict[updType]} ")
 
-                elif updType == mg.SharedDataItem.HEAD_IMU:
-                    self.cartDict[updType] = stmt[1]
-                    updateSkeletonGui(updType)
+                elif cmd == mg.SharedDataItem.HEAD_IMU:
+                    self.cartDict[cmd] = info
+                    updateSkeletonGui(cmd)
 
 
-                elif updType == mg.SharedDataItem.IR_SENSOR_REFERENCE_DISTANCE:
+                elif cmd == mg.SharedDataItem.IR_SENSOR_REFERENCE_DISTANCE:
 
                     if config.logFlags.irSensor:
-                        config.log(f"IR_SENSOR_REFERENCE_DISTANCE {stmt}")
+                        config.log(f"IR_SENSOR_REFERENCE_DISTANCE {msg}")
 
-                    sensorId = stmt[1]
+                    sensorId = info['sensorId']
 
                     # update the local copy of the dict
-                    config.irSensorReferenceDistanceLocal[sensorId].distances = np.asarray(stmt[2], dtype=np.int16)
+                    config.irSensorReferenceDistanceLocal[sensorId].distances = np.asarray(info['data'], dtype=np.int16)
 
                     # then reassign the local dict to the shared DictProxy
                     self.cartDict.update({mg.SharedDataItem.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceLocal})
 
 
-                elif updType == mg.SharedDataItem.FLOOR_OFFSET:
+                elif cmd == mg.SharedDataItem.FLOOR_OFFSET:
                     # (mg.SharedDataItem.FLOOR_OFFSET, sensorId, step, obstacleHeight, abyssDepth)
-                    sensorId = stmt[1]
-                    step = stmt[2]
+                    sensorId = info['sensorId']
+                    step = info['step']
 
                     # update the local copy of the dict
-                    config.floorOffsetLocal[sensorId].obstacleHeight[step] = stmt[3]
-                    config.floorOffsetLocal[sensorId].abyssDepth[step] = stmt[4]
+                    config.floorOffsetLocal[sensorId].obstacleHeight[step] = info['height']
+                    config.floorOffsetLocal[sensorId].abyssDepth[step] = info['depth']
                     config.floorOffsetLocal[sensorId].lastUpdate = time.time()
 
                     # then reassign the local dict to the shared DictProxy
@@ -324,11 +384,11 @@ class MarvinData:
 
 
                 else:
-                    config.log(f"unknown updType {stmt}")
+                    config.log(f"unknown updType {msg}")
 
             except Exception as e:
                 xc_type, exc_obj, exc_tb = sys.exc_info()
-                config.log(f"error in dict update: {stmt}, {exc_tb.tb_lineno}, {e}")
+                config.log(f"error in dict update: {msg}, line: {exc_tb.tb_lineno}, {e=}")
 
 
 
