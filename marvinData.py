@@ -249,9 +249,6 @@ class MarvinData:
         newServoStatic: skeletonClasses.ServoStatic = skeletonClasses.ServoStatic(info['data'])
         self.servoStaticDict[servoStaticName] = newServoStatic
 
-        #newServoStatic = info['data']
-        self.servoStaticDict[servoStaticName] = newServoStatic
-
         # update derived servo values too
         servoType = self.servoTypeDict[newServoStatic.servoType]
         newServoDerived = skeletonClasses.ServoDerived(newServoStatic, servoType)
@@ -273,17 +270,19 @@ class MarvinData:
                    'info': {'servoName': servoStaticName}}
             config.md.skeletonGuiUpdateQueue.put(msg)
 
-    def updateServoCurrentDict(self, sender, info):
+
+    def updateServoCurrentDict(self, sender:str, info:dict):
 
         servoName = info['servoName']
 
-        newServoCurrent = info['data']  # this is always the complete dict now
+        newServoCurrent = skeletonClasses.ServoCurrent()
+        newServoCurrent.updateData(info['data'])
 
         if config.logInRequestList and servoName in self.servoCurrentDict:
-            if not self.servoCurrentDict[servoName]['inRequestList'] and newServoCurrent['inRequestList']:
+            if not self.servoCurrentDict[servoName].inRequestList and newServoCurrent.inRequestList:
                 config.log(f"{servoName=} now inRequestList")
 
-            if self.servoCurrentDict[servoName]['inRequestList'] and not newServoCurrent['inRequestList']:
+            if self.servoCurrentDict[servoName].inRequestList and not newServoCurrent.inRequestList:
                 config.log(f"{servoName=} not inRequestList any more")
 
         self.servoCurrentDict[servoName] = newServoCurrent
