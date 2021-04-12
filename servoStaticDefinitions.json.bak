@@ -2,7 +2,7 @@
   "leftArm.rotate": {
     "arduinoIndex": 0,
     "pin": 10,
-    "powerPin": 40,
+    "powerPin": 14,
     "minComment": "rotate left (out)",
     "maxComment": "rotate right (in)",
     "minPos": 0,
@@ -23,7 +23,7 @@
   "leftArm.shoulder": {
     "arduinoIndex": 0,
     "pin": 9,
-    "powerPin": 40,
+    "powerPin": 14,
     "minComment": "forward",
     "maxComment": "backward",
     "minPos": 0,
@@ -44,7 +44,7 @@
   "leftArm.bicep": {
     "arduinoIndex": 0,
     "pin": 11,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "down",
     "maxComment": "up",
     "minPos": 26,
@@ -65,7 +65,7 @@
   "leftArm.omoplate": {
     "arduinoIndex": 0,
     "pin": 8,
-    "powerPin": 40,
+    "powerPin": 14,
     "minComment": "at body",
     "maxComment": "out",
     "minPos": 10,
@@ -86,7 +86,7 @@
   "leftHand.thumb": {
     "arduinoIndex": 0,
     "pin": 7,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -107,7 +107,7 @@
   "leftHand.index": {
     "arduinoIndex": 0,
     "pin": 6,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -128,7 +128,7 @@
   "leftHand.majeure": {
     "arduinoIndex": 0,
     "pin": 5,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -149,7 +149,7 @@
   "leftHand.ringFinger": {
     "arduinoIndex": 0,
     "pin": 4,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -170,7 +170,7 @@
   "leftHand.pinky": {
     "arduinoIndex": 0,
     "pin": 3,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 15,
@@ -191,7 +191,7 @@
   "leftHand.wrist": {
     "arduinoIndex": 0,
     "pin": 2,
-    "powerPin": 42,
+    "powerPin": 15,
     "minComment": "rotate right",
     "maxComment": "rotate left",
     "minPos": 0,
@@ -212,17 +212,17 @@
   "rightArm.bicep": {
     "arduinoIndex": 1,
     "pin": 24,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "down",
     "maxComment": "up",
-    "minPos": 26,
-    "maxPos": 70,
+    "minPos": 15,
+    "maxPos": 80,
     "zeroDegPos": 15,
     "minDeg": 0,
     "maxDeg": 45,
     "autoDetach": 5000,
     "inverted": false,
-    "restDeg": 10,
+    "restDeg": 5,
     "enabled": true,
     "servoType": "HS-805",
     "moveSpeed": 1500,
@@ -233,7 +233,7 @@
   "rightArm.rotate": {
     "arduinoIndex": 1,
     "pin": 9,
-    "powerPin": 44,
+    "powerPin": 16,
     "minComment": "rotate left (in)",
     "maxComment": "rotate right (out)",
     "minPos": 0,
@@ -254,7 +254,7 @@
   "rightArm.shoulder": {
     "arduinoIndex": 1,
     "pin": 10,
-    "powerPin": 44,
+    "powerPin": 16,
     "minComment": "forward",
     "maxComment": "backward",
     "minPos": 0,
@@ -275,7 +275,7 @@
   "rightArm.omoplate": {
     "arduinoIndex": 1,
     "pin": 22,
-    "powerPin": 44,
+    "powerPin": 16,
     "minComment": "at body",
     "maxComment": "out",
     "minPos": 10,
@@ -296,7 +296,7 @@
   "rightHand.thumb": {
     "arduinoIndex": 1,
     "pin": 2,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -317,7 +317,7 @@
   "rightHand.index": {
     "arduinoIndex": 1,
     "pin": 3,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 50,
@@ -338,7 +338,7 @@
   "rightHand.majeure": {
     "arduinoIndex": 1,
     "pin": 4,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -359,7 +359,7 @@
   "rightHand.ringFinger": {
     "arduinoIndex": 1,
     "pin": 5,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 0,
@@ -380,7 +380,7 @@
   "rightHand.pinky": {
     "arduinoIndex": 1,
     "pin": 6,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "open",
     "maxComment": "close",
     "minPos": 20,
@@ -401,7 +401,7 @@
   "rightHand.wrist": {
     "arduinoIndex": 1,
     "pin": 7,
-    "powerPin": 46,
+    "powerPin": 17,
     "minComment": "rotate left",
     "maxComment": "rotate right",
     "minPos": 0,
@@ -422,7 +422,7 @@
   "head.eyeX": {
     "arduinoIndex": 0,
     "pin": 22,
-    "powerPin": 41,
+    "powerPin": 18,
     "minComment": "look left",
     "maxComment": "look right",
     "minPos": 70,
@@ -442,8 +442,8 @@
   },
   "head.eyeY": {
     "arduinoIndex": 0,
-    "pin": 24,
-    "powerPin": 41,
+    "pin": 23,
+    "powerPin": 18,
     "minComment": "look up",
     "maxComment": "look down",
     "minPos": 30,
@@ -463,8 +463,8 @@
   },
   "head.jaw": {
     "arduinoIndex": 0,
-    "pin": 26,
-    "powerPin": 41,
+    "pin": 24,
+    "powerPin": 18,
     "minComment": "close",
     "maxComment": "open",
     "minPos": 80,
@@ -484,8 +484,8 @@
   },
   "head.rothead": {
     "arduinoIndex": 0,
-    "pin": 28,
-    "powerPin": 41,
+    "pin": 25,
+    "powerPin": 18,
     "minComment": "look left",
     "maxComment": "look right",
     "minPos": 40,
@@ -505,8 +505,8 @@
   },
   "head.neck": {
     "arduinoIndex": 0,
-    "pin": 12,
-    "powerPin": 41,
+    "pin": 21,
+    "powerPin": 18,
     "minComment": "down",
     "maxComment": "up",
     "minPos": 0,
@@ -527,7 +527,7 @@
   "torso.topStom": {
     "arduinoIndex": 1,
     "pin": 27,
-    "powerPin": 43,
+    "powerPin": 19,
     "minComment": "minComment",
     "maxComment": "maxComment",
     "minPos": 0,
@@ -548,7 +548,7 @@
   "torso.midStom": {
     "arduinoIndex": 1,
     "pin": 28,
-    "powerPin": 43,
+    "powerPin": 19,
     "minComment": "minComment",
     "maxComment": "maxComment",
     "minPos": 0,

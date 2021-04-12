@@ -12,7 +12,7 @@ config.marvinShares = marvinShares.MarvinShares()
 
 once the process has successfully set up a reference to the shared object it can 
 - dict read values 
-    headImu = config.marvinShares.cartDict.get(mg.SharedDataItem.HEAD_IMU)
+    headImu = config.marvinShares.cartDict.get(mg.SharedDataItems.HEAD_IMU)
         as in the above case cartDict is a DictProxy object (python 3.9) we need to use the get() method
         to access subDicts.
   - dict update values
@@ -28,13 +28,13 @@ in order to prevent processes getting stuck on waiting for requests and terminat
 in case of a connection loss the get call will throw an exception
 it the process needs to check with marvinData the process should not wait endlessy but check
 periodically 
-request = config.marvinShares.imageProcessingQueue.get(block=True, timeout=1)
+request = config.marvinShares.imageProcessingRequestQueue.get(block=True, timeout=1)
 
 # To add a shared dict (example NEW_DICT):
 - marvinglobal.py
   
-    add a new dict type into SharedDataItem and assign a unique number
-    sharedDataItem
+    add a new dict type into SharedDataItems and assign a unique number
+    SharedDataItems
         NEW_DICT = "unique number"
   
   
@@ -46,7 +46,7 @@ request = config.marvinShares.imageProcessingQueue.get(block=True, timeout=1)
             create the shared dict in the MarvinData class
                 self.newDict = ShareManager.dict()
                 in case of a subDict
-                    parentDict.update({mg.SharedDataItem.NEW_DICT: config.newDictLocal})
+                    parentDict.update({mg.SharedDataItems.NEW_DICT: config.newDictLocal})
 
         create a get method for the dict
             def getNewDict(self):
@@ -107,6 +107,6 @@ in modules accessing shared elements use the following imports:
     from marvinglobal import marvinglobal as mg
     from marvinglobal import marvinShares
     from marvinglobal import cartClasses
-    from marvinglobal import cartCommandMethods
+    from marvinglobal import CartCommandsMethods
     from marvinglobal import servoClasses
     from marvinglobal import servoCommandMethods

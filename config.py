@@ -4,6 +4,7 @@ import logging
 
 from marvinglobal import marvinglobal as mg
 from marvinglobal import cartClasses
+from marvinglobal import environmentClasses
 
 
 allMarvinTasks = ["skeletonControl", "skeletonGui", "audio"]
@@ -16,12 +17,13 @@ share = None
 
 logServoCurrentMessages = False
 logProcessListChanges = True
-logInRequestList = True
+logInRequestList = False
 
-# create instances of the shared data objects
+# cart related data
 cartConfigurationLocal = cartClasses.Configuration()
 cartStateLocal = cartClasses.State()
-cartLocationLocal = cartClasses.Location()
+cartLocationLocal = mg.Location()
+cartTargetLocal = mg.Location()
 cartMovementLocal = cartClasses.Movement
 sensorTestDataLocal = cartClasses.SensorTestData()
 floorOffsetLocal = [cartClasses.FloorOffset() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
@@ -31,6 +33,13 @@ irSensorReferenceDistanceLocal = [cartClasses.IrSensorReferenceDistance() for i 
 
 headImuLocal = cartClasses.ImuData()
 platformImuLocal = cartClasses.ImuData()
+
+
+# environment related data
+roomDataLocal = environmentClasses.RoomData()
+scanLocationListLocal = environmentClasses.ScanLocationList()
+markerListLocal = environmentClasses.MarkerList()
+
 
 class LogFlags:
     def __init__(self):
