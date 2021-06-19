@@ -3,9 +3,10 @@ import time, datetime
 import logging
 
 from marvinglobal import marvinglobal as mg
+from marvinglobal import skeletonClasses
 from marvinglobal import cartClasses
 from marvinglobal import environmentClasses
-
+from marvinglobal import marvinShares
 
 allMarvinTasks = ["skeletonControl", "skeletonGui", "audio"]
 
@@ -13,11 +14,18 @@ processName = 'marvinData'
 persistedServoPositions = {}
 lastPositionSaveTime = time.time()
 md = None       # MarvinData object
-share = None
+marvinShares = marvinShares.MarvinShares()
 
 logServoCurrentMessages = False
 logProcessListChanges = True
 logInRequestList = False
+
+# servo ralated data
+servoTypeLocal = {}  #skeletonClasses.ServoType()
+servoStaticLocal = {}   #skeletonClasses.ServoStatic()
+servoFeedbackLocal = {}
+servoDerivedLocal = {}
+servoCurrentLocal = {}
 
 # cart related data
 cartConfigurationLocal = cartClasses.Configuration()
@@ -28,7 +36,7 @@ cartMovementLocal = cartClasses.Movement
 sensorTestDataLocal = cartClasses.SensorTestData()
 floorOffsetLocal = [cartClasses.FloorOffset() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
 
-obstacleDistanceLocal = cartClasses.ObstacleDistance()
+usSensorDistanceLocal = cartClasses.UsSensorDistance()
 irSensorReferenceDistanceLocal = [cartClasses.IrSensorReferenceDistance() for i in range(mg.NUM_IR_DISTANCE_SENSORS)]
 
 headImuLocal = cartClasses.ImuData()

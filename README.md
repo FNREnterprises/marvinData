@@ -107,6 +107,6 @@ in modules accessing shared elements use the following imports:
     from marvinglobal import marvinglobal as mg
     from marvinglobal import marvinShares
     from marvinglobal import cartClasses
-    from marvinglobal import CartCommandsMethods
+    from marvinglobal import CartCommandMethods
     from marvinglobal import servoClasses
     from marvinglobal import servoCommandMethods
