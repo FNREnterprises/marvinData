@@ -19,16 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="07/01/2021">
-      <change afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/marvinData.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/marvinData.iml" afterDir="false" />
+    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/marvinData.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/marvinData.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/marvinData.py" beforeDir="false" afterPath="$PROJECT_DIR$/marvinData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/persistedServoPositions.json" beforeDir="false" afterPath="$PROJECT_DIR$/persistedServoPositions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servoFeedbackDefinitions.json" beforeDir="false" afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servoFeedbackDefinitions.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json.bak" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servoStaticDefinitions.json" beforeDir="false" afterPath="$PROJECT_DIR$/servoStaticDefinitions.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servoStaticDefinitions.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/servoStaticDefinitions.json.bak" afterDir="false" />
     </list>
@@ -101,7 +98,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610016503227</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="update">
+      <created>1624120756441</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1624120756441</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -124,30 +128,26 @@
     <MESSAGE value="working sensorTest" />
     <MESSAGE value="12/12/2020" />
     <MESSAGE value="07/01/2021" />
-    <option name="LAST_COMMIT_MESSAGE" value="07/01/2021" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/skeletonControl.py</url>
-          <line>277</line>
+          <line>226</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/skeletonControl.py</url>
-          <line>252</line>
+          <line>208</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/config.py</url>
-          <line>61</line>
+          <line>62</line>
           <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/marvinData.py</url>
-          <line>465</line>
-          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

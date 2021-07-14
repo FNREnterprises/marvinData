@@ -1,8 +1,8 @@
-11:05:43.269 - initialize shared dictionaries
-11:05:43.351 - setup Queues
-11:05:43.358 - marvinData initialized
-11:05:43.359 - start shareDataUpdateQueue thread
-11:05:43.360 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
-11:05:43.360 - marvinData: registered, wait for shared data update requests
-11:05:43.360 - -----------------
-11:06:20.544 - update gui with new process state {'processName': 'marvinGui', 'running': True}
+10:58:17.045 - initialize shared dictionaries
+10:58:17.069 - setup Queues
+10:58:17.074 - marvinData initialized
+10:58:17.074 - start shareDataUpdateQueue thread
+10:58:17.075 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
+10:58:17.076 - marvinData: registered, wait for shared data update requests
+10:58:17.076 - -----------------
+10:58:49.067 - update gui with new process state {'processName': 'marvinGui', 'running': True}

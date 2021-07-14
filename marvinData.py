@@ -392,6 +392,7 @@ class MarvinData:
 
                 elif cmd == mg.SharedDataItems.HEAD_IMU:
                     self.cartDict[cmd] = info
+                    config.log(f"updateSkeletonGui triggered by HEAD_IMU")
                     updateSkeletonGui(cmd)
 
                 elif cmd == mg.SharedDataItems.SENSOR_TEST_DATA:

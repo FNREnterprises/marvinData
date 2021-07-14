@@ -2,13 +2,10 @@
   "leftArm.shoulder": {
     "i2cMultiplexerAddress": 112,
     "i2cMultiplexerChannel": 0,
-    "speedACalcType": 1,
-    "speedAFactor": 1,
-    "speedAOffset": 1,
-    "speedBCalcType": 1,
-    "speedBFactor": 1,
-    "speedBOffset": 0,
-    "degPerPos": 6,
-    "servoSpeedRange": 10
+    "kp": 2.0,
+    "ki": 0.5,
+    "kd": 0.30000000000000004,
+    "degPerPos": 6.5,
+    "feedbackInverted": 1
   }
 }
