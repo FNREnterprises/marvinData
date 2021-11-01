@@ -46,7 +46,7 @@ request = config.marvinShares.imageProcessingRequestQueue.get(block=True, timeou
             create the shared dict in the MarvinData class
                 self.newDict = ShareManager.dict()
                 in case of a subDict
-                    parentDict.update({mg.SharedDataItems.NEW_DICT: config.newDictLocal})
+                    parentDict.update({mg.SharedDataItems.NEW_DICT: config.newDictNew})
 
         create a get method for the dict
             def getNewDict(self):

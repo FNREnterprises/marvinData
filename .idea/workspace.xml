@@ -19,8 +19,32 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="">
+    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="update">
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/cartcamImages/x2147_y-52_yaw359.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/cartcamImages/x2146_y-52_yaw0.0.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/marvinData.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/marvinData.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/marvinData.py" beforeDir="false" afterPath="$PROJECT_DIR$/marvinData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/persistedServoPositions.json" beforeDir="false" afterPath="$PROJECT_DIR$/persistedServoPositions.json" afterDir="false" />
@@ -45,6 +69,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/marvinData.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectId" id="1kK8FaWsRrIMVDp9zQPAX2Kbhpr" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -58,8 +85,8 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../marvinglobal" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../navManager" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -105,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624120756441</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update">
+      <created>1626243985950</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1626243985950</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -136,17 +170,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/skeletonControl.py</url>
-          <line>226</line>
+          <line>227</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/skeletonControl.py</url>
-          <line>208</line>
+          <line>209</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/../skeletonControl/config.py</url>
-          <line>62</line>
+          <line>63</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>

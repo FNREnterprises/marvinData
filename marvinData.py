@@ -7,9 +7,7 @@ import os
 import sys
 import time
 import simplejson as json
-import pickle
 import threading
-import numpy as np
 
 from multiprocessing.managers import SyncManager
 
@@ -21,7 +19,8 @@ import config
 
 from marvinglobal import marvinglobal as mg
 from marvinglobal import skeletonClasses
-from marvinglobal import marvinShares
+from marvinglobal import cartClasses
+from marvinglobal import distanceSensorClasses
 
 lastPositionSaveTime = None
 
@@ -31,8 +30,14 @@ class ShareManager(SyncManager): pass
 def updateCartGui(msgType):
 
     if 'marvinGui' in config.md.processDict.keys():
-        # config.log(f"update skeletonGui {servoName=}")
         config.md.cartGuiUpdateQueue.put({'msgType': msgType})
+        config.md.mapGuiUpdateQueue.put({'msgType': msgType})
+
+def updateCartGuiIrSensor(msgType, irSensorId):
+
+    #if 'marvinGui' in config.md.processDict.keys():
+        # config.log(f"update skeletonGui {servoName=}")
+    config.md.cartGuiUpdateQueue.put({'msgType': msgType, 'irSensorId': irSensorId})
 
 
 def updateSkeletonGui(msgType):
@@ -68,31 +73,33 @@ class MarvinData:
         #config.log(f"open servo types file {config.SERVO_TYPE_DEFINITIONS_FILE}")
         self.servoDict = shareManager.dict()
         # add the different servo data sections
-        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeLocal})
-        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticLocal})
-        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackLocal})
-        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedLocal})
-        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentLocal})
+        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
+        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
+        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
+        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
+        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
 
         # cart related data dict
         self.cartDict = shareManager.dict()
         # add the different cart data sections
-        self.cartDict.update({mg.SharedDataItems.CART_CONFIGURATION: config.cartConfigurationLocal})
-        self.cartDict.update({mg.SharedDataItems.CART_STATE: config.cartStateLocal})
-        self.cartDict.update({mg.SharedDataItems.CART_LOCATION: config.cartLocationLocal})
-        self.cartDict.update({mg.SharedDataItems.CART_MOVEMENT: config.cartMovementLocal})
-        self.cartDict.update({mg.SharedDataItems.CART_TARGET: config.cartTargetLocal})
-        self.cartDict.update({mg.SharedDataItems.SENSOR_TEST_DATA: config.sensorTestDataLocal})
-        self.cartDict.update({mg.SharedDataItems.FLOOR_OFFSET: config.floorOffsetLocal})
-        self.cartDict.update({mg.SharedDataItems.ULTRASONIC_SENSORS: config.usSensorDistanceLocal})
-        self.cartDict.update({mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceLocal})
-        self.cartDict.update({mg.SharedDataItems.HEAD_IMU: config.headImuLocal})
-        self.cartDict.update({mg.SharedDataItems.PLATFORM_IMU: config.platformImuLocal})
+        self.cartDict.update({mg.SharedDataItems.CART_CONFIGURATION: config.cartConfigurationNew})
+        self.cartDict.update({mg.SharedDataItems.CART_STATE: config.cartStateNew})
+        self.cartDict.update({mg.SharedDataItems.CART_LOCATION: config.cartLocationNew})
+        self.cartDict.update({mg.SharedDataItems.CART_MOVEMENT: config.cartMovementNew})
+        self.cartDict.update({mg.SharedDataItems.CART_TARGET: config.cartTargetNew})
+        #self.cartDict.update({mg.SharedDataItems.SENSOR_TEST_DATA: config.sensorTestDataNew})
+        self.cartDict.update({mg.SharedDataItems.FLOOR_OFFSET: config.floorOffsetNew})
+        self.cartDict.update({mg.SharedDataItems.SWIPING_IR_SENSORS: config.swipingIrSensorsNew})
+        self.cartDict.update({mg.SharedDataItems.STATIC_IR_SENSORS: config.staticIrSensorsNew})
+        self.cartDict.update({mg.SharedDataItems.ULTRASONIC_SENSORS: config.usSensorsNew})
+        #self.cartDict.update({mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceNew})
+        self.cartDict.update({mg.SharedDataItems.HEAD_IMU: config.headImuNew})
+        self.cartDict.update({mg.SharedDataItems.PLATFORM_IMU: config.platformImuNew})
 
         self.environmentDict = shareManager.dict()
-        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_ROOM: config.roomDataLocal})
-        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_MARKER_LIST: config.markerListLocal})
-        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_SCAN_LOCATION_LIST: config.scanLocationListLocal})
+        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_ROOM: config.roomDataNew})
+        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_MARKER_LIST: config.markerListNew})
+        self.environmentDict.update({mg.SharedDataItems.ENVIRONMENT_SCAN_LOCATION_LIST: config.scanLocationListNew})
 
         config.log(f"setup Queues")
         self.sharedDataUpdateQueue = multiprocessing.Queue()
@@ -125,42 +132,42 @@ class MarvinData:
         if self.verbose: config.log(f"servoStaticDefinitions updated into file")
 
 
-    def getProcessDict(self):
+    def get_processDict(self):
         return self.processDict
 
-    def getArduinoDict(self):
+    def get_arduinoDict(self):
         return self.arduinoDict
 
-    def getServoDict(self):
+    def get_servoDict(self):
         return self.servoDict
 
-    def getCartDict(self):
+    def get_cartDict(self):
         return self.cartDict
 
-    def getEnvironmentDict(self):
+    def get_environmentDict(self):
         return self.environmentDict
 
     def run(self):
         # register the shared dicts
-        ShareManager.register('getProcessDict', self.getProcessDict)
-        ShareManager.register('getArduinoDict', self.getArduinoDict)
-        ShareManager.register('getServoDict', self.getServoDict)
-        ShareManager.register('getCartDict', self.getCartDict)
-        ShareManager.register('getEnvironmentDict', self.getEnvironmentDict)
+        ShareManager.register('get_processDict', self.get_processDict)
+        ShareManager.register('get_arduinoDict', self.get_arduinoDict)
+        ShareManager.register('get_servoDict', self.get_servoDict)
+        ShareManager.register('get_cartDict', self.get_cartDict)
+        ShareManager.register('get_environmentDict', self.get_environmentDict)
 
         # register the shared queues
-        ShareManager.register('getSharedDataUpdateQueue', callable=lambda: self.sharedDataUpdateQueue)
-        ShareManager.register('getIkUpdateQueue', callable=lambda: self.ikUpdateQueue)
-        ShareManager.register('getSkeletonGuiUpdateQueue', callable=lambda: self.skeletonGuiUpdateQueue)
-        ShareManager.register('getCartGuiUpdateQueue', callable=lambda: self.cartGuiUpdateQueue)
-        ShareManager.register('getMapGuiUpdateQueue', callable=lambda: self.mapGuiUpdateQueue)
-        ShareManager.register('getMainGuiUpdateQueue', callable=lambda: self.mainGuiUpdateQueue)
-        ShareManager.register('getSkeletonRequestQueue', callable=lambda: self.skeletonRequestQueue)
-        ShareManager.register('getCartRequestQueue', callable=lambda: self.cartRequestQueue)
-        ShareManager.register('getSpeakRequestQueue', callable=lambda:self.speakRequestQueue)
-        ShareManager.register('getPlayGestureQueue', callable=lambda:self.playGestureQueue)
-        ShareManager.register('getNavManagerRequestQueue', callable=lambda: self.navManagerRequestQueue)
-        ShareManager.register('getImageProcessingRequestQueue', callable=lambda: self.imageProcessingRequestQueue)
+        ShareManager.register('get_sharedDataUpdateQueue', callable=lambda: self.sharedDataUpdateQueue)
+        ShareManager.register('get_ikUpdateQueue', callable=lambda: self.ikUpdateQueue)
+        ShareManager.register('get_skeletonGuiUpdateQueue', callable=lambda: self.skeletonGuiUpdateQueue)
+        ShareManager.register('get_cartGuiUpdateQueue', callable=lambda: self.cartGuiUpdateQueue)
+        ShareManager.register('get_mapGuiUpdateQueue', callable=lambda: self.mapGuiUpdateQueue)
+        ShareManager.register('get_mainGuiUpdateQueue', callable=lambda: self.mainGuiUpdateQueue)
+        ShareManager.register('get_skeletonRequestQueue', callable=lambda: self.skeletonRequestQueue)
+        ShareManager.register('get_cartRequestQueue', callable=lambda: self.cartRequestQueue)
+        ShareManager.register('get_speakRequestQueue', callable=lambda:self.speakRequestQueue)
+        ShareManager.register('get_playGestureQueue', callable=lambda:self.playGestureQueue)
+        ShareManager.register('get_navManagerRequestQueue', callable=lambda: self.navManagerRequestQueue)
+        ShareManager.register('get_imageProcessingRequestQueue', callable=lambda: self.imageProcessingRequestQueue)
 
         # start thread for updating the dicts
         config.log(f"start shareDataUpdateQueue thread")
@@ -192,7 +199,7 @@ class MarvinData:
         stateChanged = False
 
         # processes should check for a request to stop by another process
-        # a process can be stopped by adding a 'remove' key into the messaage
+        # a process can be stopped by adding a 'remove' key into the message
         if 'remove' in info:
             # check for stopping marvinData process
             if info['processName'] == 'marvinData':
@@ -257,23 +264,23 @@ class MarvinData:
         servoTypeName = info['type']
         newServoType: skeletonClasses.ServoType = skeletonClasses.ServoType()
         newServoType.updateValues(info['data'])
-        config.servoTypeLocal.update({servoTypeName: newServoType})
-        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeLocal})
+        config.servoTypeNew.update({servoTypeName: newServoType})
+        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
 
     def updateServoStaticDict(self, sender, info):
         servoStaticName = info['servoName']
         newServoStatic: skeletonClasses.ServoStatic = skeletonClasses.ServoStatic()
         newServoStatic.updateValues(info['data'])
-        config.servoStaticLocal.update({servoStaticName: newServoStatic})
-        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticLocal})
+        config.servoStaticNew.update({servoStaticName: newServoStatic})
+        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
 
         # update derived servo values too
         servoTypeDict = self.servoDict.get(mg.SharedDataItems.SERVO_TYPE)
         servoType = servoTypeDict[newServoStatic.servoType]
         newServoDerived = skeletonClasses.ServoDerived()
         newServoDerived.updateValues(newServoStatic, servoType)
-        config.servoDerivedLocal.update({servoStaticName: newServoDerived})
-        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedLocal})
+        config.servoDerivedNew.update({servoStaticName: newServoDerived})
+        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
 
         # save modified static dict to file
         config.md.saveServoStaticDict()
@@ -295,8 +302,8 @@ class MarvinData:
         servoName = info['servoName']
         newServoFeedback = skeletonClasses.ServoFeedback()
         newServoFeedback.updateValues(info['data'])  # allow partial update
-        config.servoFeedbackLocal.update({servoName: newServoFeedback})
-        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackLocal})
+        config.servoFeedbackNew.update({servoName: newServoFeedback})
+        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
 
     def updateServoCurrentDict(self, sender:str, info:dict):
 
@@ -315,8 +322,8 @@ class MarvinData:
                 config.log(f"{servoName=} not inRequestList any more")
 
         #self.servoCurrentDict[servoName] = newServoCurrent
-        config.servoCurrentLocal.update({servoName: newServoCurrent})
-        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentLocal})
+        config.servoCurrentNew.update({servoName: newServoCurrent})
+        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
 
 
         # update skeleton gui if running
@@ -326,6 +333,35 @@ class MarvinData:
                     'info': {'servoName': servoName}}
             config.md.skeletonGuiUpdateQueue.put(msg2)
 
+    def updateCartDict(self):
+        # create the distance sensor objects
+        for i, item in enumerate(distanceSensorClasses.swipingIrSensorProperties):
+            config.swipingIrSensorsNew.append(
+                distanceSensorClasses.SwipingIrSensor(item['distanceSensorType'], item['sensorId'], item['name'],
+                                            item['irDistanceSensorType']))
+
+        for i, item in enumerate(distanceSensorClasses.staticIrSensorProperties):
+            config.staticIrSensorsNew.append(
+                distanceSensorClasses.StaticIrSensor(item['distanceSensorType'], item['sensorId'], item['name'],
+                                           item['irDistanceSensorType']))
+
+        for i, item in enumerate(distanceSensorClasses.usSensorProperties):
+            config.usSensorsNew.append(
+                distanceSensorClasses.UsSensor(item['distanceSensorType'], item['sensorId'], item['name']))
+
+
+    def checkRunningTasks(self):
+        #'info': {'processName': processName, 'running': True, 'lastUpdate': time.time()}}
+        for process in self.processDict.items():
+            if process[1]['running']:
+                if time.time() - process[1]['lastUpdate'] > 2:
+
+                    if process[0] == 'cartControl':
+                        config.cartStateNew.cartStatus = mg.CartStatus.DOWN
+                        self.cartDict.update({mg.SharedDataItems.CART_STATE: config.cartStateNew})
+
+                    config.log(f"{process=} stopped running")
+                    self.updateProcessDict('marvinData', {'processName': process[0], 'running' : False, 'lastUpdate': time.time(), 'remove': True})
 
     ################################################
     # thread to handle shared data updates
@@ -338,6 +374,9 @@ class MarvinData:
         # replace the object in the shared dict with the updated object
         while True:
 
+            # check whether we still get updates from running tasks
+            self.checkRunningTasks()
+
             msg = "self.sharedDataUpdateQueue.get()"
             try:
                 # as with python 3.7 a shared (proxied) nested dict can not directly be updated
@@ -345,118 +384,159 @@ class MarvinData:
                 # - update the local dict
                 # - replace whole subDict with updated dict
                 msg = self.sharedDataUpdateQueue.get()
-                #print(f"{stmt=}")
-                #updType = updStmt[0]
-                cmd = msg['msgType']
+                msgType = msg['msgType']
                 sender = msg['sender']
                 info = msg['info']
 
-                if cmd == mg.SharedDataItems.START_ALL_PROCESSES:
+                if msgType == mg.SharedDataItems.START_ALL_PROCESSES:
                     config.marvinShares.startAllProcesses()
 
-                elif cmd == mg.SharedDataItems.PROCESS:
+                elif msgType == mg.SharedDataItems.PROCESS:
                     self.updateProcessDict(sender, info)
 
-                elif cmd == mg.SharedDataItems.ARDUINO:
+                elif msgType == mg.SharedDataItems.ARDUINO:
                     self.updateArduinoDict(sender, info)
 
-                elif cmd == mg.SharedDataItems.SERVO_TYPE:
+                elif msgType == mg.SharedDataItems.SERVO_TYPE:
                     self.updateServoTypeDict(sender, info)
 
-                elif cmd == mg.SharedDataItems.SERVO_STATIC:
+                elif msgType == mg.SharedDataItems.SERVO_STATIC:
                     self.updateServoStaticDict(sender, info)
 
-                elif cmd == mg.SharedDataItems.SERVO_FEEDBACK:
+                elif msgType == mg.SharedDataItems.SERVO_FEEDBACK:
                     self.updateServoFeedbackDict(sender, info)
 
-
-                elif cmd == mg.SharedDataItems.SERVO_CURRENT:
+                elif msgType == mg.SharedDataItems.SERVO_CURRENT:
                     self.updateServoCurrentDict(sender, info)
 
-                elif cmd == mg.SharedDataItems.CART_MOVEMENT:
-                    self.cartDict[cmd] = info  #pickle.loads(info)
-                    updateCartGui(cmd)
+                elif msgType == mg.SharedDataItems.CART_MOVEMENT:
+                    self.cartDict[msgType] = info  #pickle.loads(info)
+                    updateCartGui(msgType)
 
                 # single instance shared cart dicts
-                elif cmd in [mg.SharedDataItems.CART_CONFIGURATION,
+                elif msgType in [mg.SharedDataItems.CART_CONFIGURATION,
                                  mg.SharedDataItems.CART_STATE,
                                  mg.SharedDataItems.CART_LOCATION,
                                  mg.SharedDataItems.CART_TARGET,
-                                 mg.SharedDataItems.PLATFORM_IMU,
-                                 mg.SharedDataItems.ULTRASONIC_SENSORS]:
+                                 mg.SharedDataItems.PLATFORM_IMU]:
                     #if updType in self.cartDict.keys():
                     #    config.log(f"before: {updType=}, {self.cartDict[updType]} ")
-                    self.cartDict[cmd] = info
-                    updateCartGui(cmd)
+                    self.cartDict[msgType] = info
+                    updateCartGui(msgType)
                     #config.log(f"after:  {updType=}, {self.cartDict[updType]} ")
 
-                elif cmd == mg.SharedDataItems.HEAD_IMU:
-                    self.cartDict[cmd] = info
+                elif msgType == mg.SharedDataItems.HEAD_IMU:
+                    self.cartDict[msgType] = info
                     config.log(f"updateSkeletonGui triggered by HEAD_IMU")
-                    updateSkeletonGui(cmd)
+                    updateSkeletonGui(msgType)
 
-                elif cmd == mg.SharedDataItems.SENSOR_TEST_DATA:
-                    # sensorId + distances of a single scan
+                    '''
+                    elif msgType == mg.SharedDataItems.SENSOR_TEST_DATA:
+                        # sensorId + distances of a single scan
+                        if config.logFlags.irSensor:
+                            config.log(f"SENSOR_TEST_DATA {msg}")
+    
+                        irSensorId = info['irSensorId']
+                        newTest = info['newTest']
+                        if newTest:
+                            config.sensorTestDataNew.numMeasures = np.zeros((mg.NUM_SWIPE_STEPS), dtype=np.int8)
+                            config.sensorTestDataNew.sumMeasures = np.zeros((mg.NUM_SWIPE_STEPS), dtype=np.int16)
+    
+                        # update the local copy of the dict including building the sums
+                        distArray = np.asarray(info['distances'], dtype=np.int16)
+                        config.sensorTestDataNew.distance = distArray
+                        config.sensorTestDataNew.sumMeasures += distArray
+                        if len(distArray) > 1:
+                            config.sensorTestDataNew.numMeasures[distArray > 0] += 1
+                        else:
+                            config.sensorTestDataNew.numMeasures[0] += 1
+                        # then reassign the local dict to the shared DictProxy
+                        self.cartDict.update({mg.SharedDataItems.SENSOR_TEST_DATA: config.sensorTestDataNew})
+    
+                        # and inform cart gui about the new values
+                        updateCartGui(msgType)
+                    '''
+                    '''
+                    elif msgType == mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE:
+    
+                        if config.logFlags.irSensor:
+                            config.log(f"IR_SENSOR_REFERENCE_DISTANCE {msg}")
+    
+                        irSensorId = info['irSensorId']
+    
+                        # update the local copy of the dict
+                        config.irSensorReferenceDistanceNew[irSensorId].distances = np.asarray(info['distances'], dtype=np.int16)
+    
+                        # then reassign the local dict to the shared DictProxy
+                        self.cartDict.update({mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceNew})
+                    '''
+                elif msgType == mg.SharedDataItems.SWIPING_IR_SENSORS:
+                    #msg = {'msgType': mg.SharedDataItems.SWIPING_IR_SENSORS, 'sender': config.processName,
+                    #   'info': {'sensorId': i, 'data': config.swipingIrSensorsMaster[i].__dict__}}
                     if config.logFlags.irSensor:
-                        config.log(f"SENSOR_TEST_DATA {msg}")
+                        config.log(f"SWIPING_IR_SENSORS {msg}")
 
                     irSensorId = info['irSensorId']
-                    newTest = info['newTest']
-                    if newTest:
-                        config.sensorTestDataLocal.numMeasures = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int8)
-                        config.sensorTestDataLocal.sumMeasures = np.zeros((mg.NUM_SCAN_STEPS), dtype=np.int16)
-
-                    # update the local copy of the dict including building the sums
-                    distArray = np.asarray(info['distances'], dtype=np.int16)
-                    config.sensorTestDataLocal.distance = distArray
-                    config.sensorTestDataLocal.numMeasures[distArray > 0] += 1
-                    config.sensorTestDataLocal.sumMeasures += distArray
+                    config.swipingIrSensorsNew[irSensorId] = info['data']
 
                     # then reassign the local dict to the shared DictProxy
-                    self.cartDict.update({mg.SharedDataItems.SENSOR_TEST_DATA: config.sensorTestDataLocal})
+                    self.cartDict.update({mg.SharedDataItems.SWIPING_IR_SENSORS: config.swipingIrSensorsNew})
 
-                    # and inform cart gui about the new values
-                    updateCartGui(cmd)
+                    # trigger also the gui update
+                    updateCartGuiIrSensor(mg.CartGuiUpdateRequest.SWIPING_IR_SENSORS, irSensorId)
 
-                elif cmd == mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE:
-
+                elif msgType == mg.SharedDataItems.STATIC_IR_SENSORS:
                     if config.logFlags.irSensor:
-                        config.log(f"IR_SENSOR_REFERENCE_DISTANCE {msg}")
+                        config.log(f"STATIC_IR_SENSORS {msg}")
 
                     irSensorId = info['irSensorId']
+                    config.staticIrSensorsNew[irSensorId] = info['data']
 
-                    # update the local copy of the dict
-                    config.irSensorReferenceDistanceLocal[irSensorId].distances = np.asarray(info['distances'], dtype=np.int16)
+                    # then reassign the new or updated dict to the shared DictProxy
+                    self.cartDict.update({mg.SharedDataItems.STATIC_IR_SENSORS: config.staticIrSensorsNew})
+
+                    # trigger also the gui update
+                    updateCartGuiIrSensor(mg.CartGuiUpdateRequest.STATIC_IR_SENSORS, irSensorId)
+
+
+                elif msgType == mg.SharedDataItems.ULTRASONIC_SENSORS:
+                    if config.logFlags.usSensor:
+                        config.log(f"ULTRASONIC_SENSORS {msg}")
+
+                    sensorId = info['usSensorId']
+                    config.usSensorsNew[sensorId] = info['data']
 
                     # then reassign the local dict to the shared DictProxy
-                    self.cartDict.update({mg.SharedDataItems.IR_SENSOR_REFERENCE_DISTANCE: config.irSensorReferenceDistanceLocal})
+                    self.cartDict.update({mg.SharedDataItems.ULTRASONIC_SENSORS: config.usSensorsNew})
 
 
-                elif cmd == mg.SharedDataItems.FLOOR_OFFSET:
+                elif msgType == mg.SharedDataItems.FLOOR_OFFSET:
                     # (mg.SharedDataItems.FLOOR_OFFSET, irSensorId, step, obstacleHeight, abyssDepth)
                     irSensorId = info['irSensorId']
                     step = info['step']
 
                     # update the local copy of the dict
-                    config.floorOffsetLocal[irSensorId].obstacleHeight[step] = info['height']
-                    config.floorOffsetLocal[irSensorId].abyssDepth[step] = info['depth']
-                    config.floorOffsetLocal[irSensorId].lastUpdate = time.time()
+                    config.floorOffsetNew[irSensorId].obstacleHeight[step] = info['height']
+                    config.floorOffsetNew[irSensorId].abyssDepth[step] = info['depth']
+                    config.floorOffsetNew[irSensorId].lastUpdate = time.time()
 
                     # then reassign the local dict to the shared DictProxy
-                    self.cartDict.update({mg.SharedDataItems.FLOOR_OFFSET: config.floorOffsetLocal})
-                    #updateCartGui(updType) updateGui request from cartControl when all sensors have been queried
+                    self.cartDict.update({mg.SharedDataItems.FLOOR_OFFSET: config.floorOffsetNew})
+                    if step == 0 or step == mg.NUM_SWIPE_STEPS:
+                        updateCartGui(msgType)  # updateGui request from cartControl for each swipe
 
-                elif cmd == mg.SharedDataItems.ENVIRONMENT_ROOM:
-                    self.environmentDict[cmd] = info
-                    updateMapGui(cmd)
 
-                elif cmd == mg.SharedDataItems.ENVIRONMENT_SCAN_LOCATION_LIST:
-                    self.environmentDict[cmd] = info
-                    updateMapGui(cmd)
+                elif msgType == mg.SharedDataItems.ENVIRONMENT_ROOM:
+                    self.environmentDict[msgType] = info
+                    updateMapGui(msgType)
 
-                elif cmd == mg.SharedDataItems.ENVIRONMENT_MARKER_LIST:
-                    self.environmentDict[cmd] = info
-                    updateMapGui(cmd)
+                elif msgType == mg.SharedDataItems.ENVIRONMENT_SCAN_LOCATION_LIST:
+                    self.environmentDict[msgType] = info
+                    updateMapGui(msgType)
+
+                elif msgType == mg.SharedDataItems.ENVIRONMENT_MARKER_LIST:
+                    self.environmentDict[msgType] = info
+                    updateMapGui(msgType)
 
 
                 else:
@@ -465,6 +545,7 @@ class MarvinData:
             except Exception as e:
                 xc_type, exc_obj, exc_tb = sys.exc_info()
                 config.log(f"error in dict update: {msg}, frame: {exc_tb.tb_frame} line: {exc_tb.tb_lineno}, {e=}")
+                os._exit(1)
 
 
 
