@@ -3,8 +3,11 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/log" />
+      <excludeFolder url="file://$MODULE_DIR$/venv3.11" />
+      <excludeFolder url="file://$MODULE_DIR$/venv3.10" />
+      <excludeFolder url="file://$MODULE_DIR$/venv3.9" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.9 (py39)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (marvindata)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

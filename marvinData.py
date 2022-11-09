@@ -2,6 +2,7 @@
 
 """
 marvinData maintains the global data used in the InMoov control
+for missing distutil run sudo apt install python3.x-distutils
 """
 import os
 import sys
@@ -68,16 +69,18 @@ class MarvinData:
         config.log(f"initialize shared dictionaries")
 
         self.processDict = shareManager.dict()
+        #self.processDict = dict()
+        #self.sharedDataUpdateQueue = multiprocessing.Queue()
         self.arduinoDict = shareManager.dict()
 
         #config.log(f"open servo types file {config.SERVO_TYPE_DEFINITIONS_FILE}")
-        self.servoDict = shareManager.dict()
+        self.servoStaticDict = shareManager.dict()
         # add the different servo data sections
-        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
-        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
-        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
-        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
-        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
 
         # cart related data dict
         self.cartDict = shareManager.dict()
@@ -122,7 +125,7 @@ class MarvinData:
         :return:
         """
         servoStaticDefinitions = {}
-        servoStaticDict = self.servoDict.get(mg.SharedDataItems.SERVO_STATIC)
+        servoStaticDict = self.servoStaticDict.get(mg.SharedDataItems.SERVO_STATIC)
         for thisServoName, servoObject in servoStaticDict.items():
             servoStaticDefinitions.update({thisServoName: servoObject.__dict__})
 
@@ -133,13 +136,14 @@ class MarvinData:
 
 
     def get_processDict(self):
+        config.log(f"return processDict")
         return self.processDict
 
     def get_arduinoDict(self):
         return self.arduinoDict
 
-    def get_servoDict(self):
-        return self.servoDict
+    def get_servoStaticDict(self):
+        return self.servoStaticDict
 
     def get_cartDict(self):
         return self.cartDict
@@ -151,7 +155,7 @@ class MarvinData:
         # register the shared dicts
         ShareManager.register('get_processDict', self.get_processDict)
         ShareManager.register('get_arduinoDict', self.get_arduinoDict)
-        ShareManager.register('get_servoDict', self.get_servoDict)
+        ShareManager.register('get_servoStaticDict', self.get_servoStaticDict)
         ShareManager.register('get_cartDict', self.get_cartDict)
         ShareManager.register('get_environmentDict', self.get_environmentDict)
 
@@ -174,7 +178,7 @@ class MarvinData:
         updateRequestsThread = threading.Thread(name="sharedDataUpdateRequests", target=self.sharedDataUpdateRequests, args={})
         updateRequestsThread.start()
 
-        # request all processes to be started
+        # request all InMoov processes to be started
         request =  {'msgType': mg.SharedDataItems.START_ALL_PROCESSES, 'sender': 'marvinData', 'info': ''}
         #self.sharedDataUpdateQueue.put(request)
         # 22. april 2021 found no way to make this work (marvinglobal, startProcess)
@@ -184,6 +188,10 @@ class MarvinData:
             config.log(f"marvinData: shareManager instanciated, {mg.SHARED_DATA_PORT=}")
             self.s = self.m.get_server()
             config.log(f"marvinData: registered, wait for shared data update requests")
+
+            # check for shared dict content
+            config.log(f"md.processDict {config.md.processDict}")
+
             config.log(f"-----------------")
             self.s.serve_forever()
 
@@ -265,22 +273,22 @@ class MarvinData:
         newServoType: skeletonClasses.ServoType = skeletonClasses.ServoType()
         newServoType.updateValues(info['data'])
         config.servoTypeNew.update({servoTypeName: newServoType})
-        self.servoDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_TYPE: config.servoTypeNew})
 
     def updateServoStaticDict(self, sender, info):
         servoStaticName = info['servoName']
         newServoStatic: skeletonClasses.ServoStatic = skeletonClasses.ServoStatic()
         newServoStatic.updateValues(info['data'])
         config.servoStaticNew.update({servoStaticName: newServoStatic})
-        self.servoDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_STATIC: config.servoStaticNew})
 
         # update derived servo values too
-        servoTypeDict = self.servoDict.get(mg.SharedDataItems.SERVO_TYPE)
+        servoTypeDict = self.servoStaticDict.get(mg.SharedDataItems.SERVO_TYPE)
         servoType = servoTypeDict[newServoStatic.servoType]
         newServoDerived = skeletonClasses.ServoDerived()
         newServoDerived.updateValues(newServoStatic, servoType)
         config.servoDerivedNew.update({servoStaticName: newServoDerived})
-        self.servoDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_DERIVED: config.servoDerivedNew})
 
         # save modified static dict to file
         config.md.saveServoStaticDict()
@@ -303,7 +311,7 @@ class MarvinData:
         newServoFeedback = skeletonClasses.ServoFeedback()
         newServoFeedback.updateValues(info['data'])  # allow partial update
         config.servoFeedbackNew.update({servoName: newServoFeedback})
-        self.servoDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_FEEDBACK: config.servoFeedbackNew})
 
     def updateServoCurrentDict(self, sender:str, info:dict):
 
@@ -323,7 +331,7 @@ class MarvinData:
 
         #self.servoCurrentDict[servoName] = newServoCurrent
         config.servoCurrentNew.update({servoName: newServoCurrent})
-        self.servoDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
+        self.servoStaticDict.update({mg.SharedDataItems.SERVO_CURRENT: config.servoCurrentNew})
 
 
         # update skeleton gui if running
@@ -560,7 +568,7 @@ def cleanup():
                         print(f'stop {processName}')
                         process.kill()
 
-        except Exception as e:  # some processes do not allow inquiries
+        except Exception as e:  # some processes do not allow inquiries, ignore them
             pass
 
 

@@ -5,7 +5,9 @@ marvinData in combination with marvinglobal instanciates the shared objects in t
 To allow processes to see the shared data objects the following setup is required:
 
 in the main section of the process try to connect with marvinData
+
 from marvinglobal import marvinShares
+
 from marvinglobal import marvinglobal as mg
 
 config.marvinShares = marvinShares.MarvinShares()
@@ -26,17 +28,16 @@ once the process has successfully set up a reference to the shared object it can
 
 in order to prevent processes getting stuck on waiting for requests and terminate gracefully 
 in case of a connection loss the get call will throw an exception
-it the process needs to check with marvinData the process should not wait endlessy but check
-periodically 
+the process needs to check periodically connection with marvinData and not wait endlessy
 request = config.marvinShares.imageProcessingRequestQueue.get(block=True, timeout=1)
 
 # To add a shared dict (example NEW_DICT):
 - marvinglobal.py
   
-    add a new dict type into SharedDataItems and assign a unique number
+    add a new dict type into SharedDataItems list and assign a unique number to it
     SharedDataItems
         NEW_DICT = "unique number"
-  
+    The number is used when receiving update requests to update the meant dict  
   
  - marvinData.py
    
@@ -66,7 +67,7 @@ request = config.marvinShares.imageProcessingRequestQueue.get(block=True, timeou
     add a publish method for the dict
     the <owner> process needs to have a local version of the dict in its config file.
     on changes of any value in the dict the owner publishes the local dict to marvinData
-    marvinData will then update its shared version of the dict and this will allow other processes to see the changes.MarvinData
+    marvinData will then update its shared version of the dict and this will allow other processes to see the changes
         
       
 ##To add a shared queue:
