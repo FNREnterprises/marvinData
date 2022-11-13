@@ -190,13 +190,14 @@ class MarvinData:
             config.log(f"marvinData: registered, wait for shared data update requests")
 
             # check for shared dict content
-            config.log(f"md.processDict {config.md.processDict}")
+            #config.log(f"md.processDict {config.md.processDict}")
 
             config.log(f"-----------------")
             self.s.serve_forever()
 
         except Exception as e:
             config.log(f"marvin shares problem, {e}")
+            config.log(f"is another instance of marvinData running?")
             os._exit(0)
 
 
@@ -412,7 +413,9 @@ class MarvinData:
                     self.updateServoStaticDict(sender, info)
 
                 elif msgType == mg.SharedDataItems.SERVO_FEEDBACK:
-                    self.updateServoFeedbackDict(sender, info)
+                    pass
+                    # TODO
+                    #self.updateServoFeedbackDict(sender, info)
 
                 elif msgType == mg.SharedDataItems.SERVO_CURRENT:
                     self.updateServoCurrentDict(sender, info)
@@ -491,7 +494,8 @@ class MarvinData:
                     self.cartDict.update({mg.SharedDataItems.SWIPING_IR_SENSORS: config.swipingIrSensorsNew})
 
                     # trigger also the gui update
-                    updateCartGuiIrSensor(mg.CartGuiUpdateRequest.SWIPING_IR_SENSORS, irSensorId)
+                    # TODO, not working
+                    #updateCartGuiIrSensor(mg.CartGuiUpdateRequest.SWIPING_IR_SENSORS, irSensorId)
 
                 elif msgType == mg.SharedDataItems.STATIC_IR_SENSORS:
                     if config.logFlags.irSensor:
@@ -504,7 +508,8 @@ class MarvinData:
                     self.cartDict.update({mg.SharedDataItems.STATIC_IR_SENSORS: config.staticIrSensorsNew})
 
                     # trigger also the gui update
-                    updateCartGuiIrSensor(mg.CartGuiUpdateRequest.STATIC_IR_SENSORS, irSensorId)
+                    # TODO, not working
+                    #  updateCartGuiIrSensor(mg.CartGuiUpdateRequest.STATIC_IR_SENSORS, irSensorId)
 
 
                 elif msgType == mg.SharedDataItems.ULTRASONIC_SENSORS:
@@ -552,7 +557,8 @@ class MarvinData:
 
             except Exception as e:
                 xc_type, exc_obj, exc_tb = sys.exc_info()
-                config.log(f"error in dict update: {msg}, frame: {exc_tb.tb_frame} line: {exc_tb.tb_lineno}, {e=}")
+                config.log(f"error in dict update: {msg}")
+                config.log(f"frame: {exc_tb.tb_frame} line: {exc_tb.tb_lineno}, {e=}")
                 os._exit(1)
 
 

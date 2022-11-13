@@ -1,10 +1,115 @@
-13:53:07.759 - initialize shared dictionaries
-13:53:07.861 - setup Queues
-13:53:07.875 - marvinData initialized
-13:53:07.875 - start shareDataUpdateQueue thread
-13:53:07.878 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
-13:53:07.879 - marvinData: registered, wait for shared data update requests
-13:53:07.880 - md.processDict {}
-13:53:07.880 - -----------------
-13:53:18.333 - return processDict
-13:53:20.838 - update gui with new process state {'processName': 'marvinGui', 'running': True}
+11:53:51.996 - initialize shared dictionaries
+11:53:52.008 - setup Queues
+11:53:52.014 - marvinData initialized
+11:53:52.014 - start shareDataUpdateQueue thread
+11:53:52.015 - marvinData: shareManager instanciated, mg.SHARED_DATA_PORT=50000
+11:53:52.015 - marvinData: registered, wait for shared data update requests
+11:53:52.015 - -----------------
+11:53:58.450 - return processDict
+11:54:01.329 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 0, 'data': 0}}
+11:54:01.332 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 1, 'data': 0}}
+11:54:01.334 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 2, 'data': 0}}
+11:54:01.335 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 3, 'data': 0}}
+11:54:01.337 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.339 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.341 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.342 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.344 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.345 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+11:54:01.347 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+11:54:01.348 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+11:54:01.350 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+11:54:01.351 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+11:54:03.420 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [168, 167, 164, 163, 165, 164, 160, 158, 160, 154, 155]}}}
+11:54:03.428 - process=('cartControl', {'processName': 'cartControl', 'running': True, 'lastUpdate': 1668336839.3634775}) stopped running
+11:54:03.429 - request from marvinData to remove process cartControl from process list
+11:54:03.431 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [151, 149, 149, 148, 149, 147, 149, 148, 153, 150, 149]}}}
+11:54:03.434 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [164, 165, 166, 167, 165, 162, 161, 162, 163, 166, 166]}}}
+11:54:03.437 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [144, 142, 141, 142, 140, 139, 138, 142, 143, 143, 143]}}}
+11:54:03.439 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [167, 168, 160, 166, 162, 165, 160, 157, 167, 167, 167]}}}
+11:54:03.442 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [140, 139, 142, 146, 146, 149, 150, 156, 158, 159, 158]}}}
+11:54:12.501 - removal of process requested by cartControl that is not in the process list: cartControl
+12:18:44.935 - return processDict
+12:18:47.807 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 0, 'data': 0}}
+12:18:47.808 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 1, 'data': 0}}
+12:18:47.809 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 2, 'data': 0}}
+12:18:47.809 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 3, 'data': 0}}
+12:18:47.810 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.810 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.811 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.812 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.812 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.813 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:18:47.813 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:18:47.813 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:18:47.814 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:18:47.814 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:18:49.902 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [168, 167, 164, 163, 165, 164, 160, 158, 160, 154, 155]}}}
+12:18:49.905 - process=('cartControl', {'processName': 'cartControl', 'running': True, 'lastUpdate': 1668338325.8449159}) stopped running
+12:18:49.906 - request from marvinData to remove process cartControl from process list
+12:18:49.907 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [151, 149, 149, 148, 149, 147, 149, 148, 153, 150, 149]}}}
+12:18:49.910 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [164, 165, 166, 167, 165, 162, 161, 162, 163, 166, 166]}}}
+12:18:49.913 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [144, 142, 141, 142, 140, 139, 138, 142, 143, 143, 143]}}}
+12:18:49.922 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [167, 168, 160, 166, 162, 165, 160, 157, 167, 167, 167]}}}
+12:18:49.960 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [140, 139, 142, 146, 146, 149, 150, 156, 158, 159, 158]}}}
+12:18:49.963 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 165}}}
+12:18:49.966 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 168}}}
+12:18:49.969 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 166}}}
+12:18:49.972 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 150}}}
+12:18:58.969 - removal of process requested by cartControl that is not in the process list: cartControl
+12:25:43.739 - return processDict
+12:25:46.618 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 0, 'data': 0}}
+12:25:46.619 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 1, 'data': 0}}
+12:25:46.621 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 2, 'data': 0}}
+12:25:46.622 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 3, 'data': 0}}
+12:25:46.624 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.626 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.628 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.629 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.631 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.632 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:25:46.633 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:25:46.635 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:25:46.636 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:25:46.638 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:25:48.709 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [168, 167, 164, 163, 165, 164, 160, 158, 160, 154, 155]}}}
+12:25:48.712 - process=('cartControl', {'processName': 'cartControl', 'running': True, 'lastUpdate': 1668338744.6528156}) stopped running
+12:25:48.713 - request from marvinData to remove process cartControl from process list
+12:25:48.715 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [151, 149, 149, 148, 149, 147, 149, 148, 153, 150, 149]}}}
+12:25:48.718 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [164, 165, 166, 167, 165, 162, 161, 162, 163, 166, 166]}}}
+12:25:48.721 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [144, 142, 141, 142, 140, 139, 138, 142, 143, 143, 143]}}}
+12:25:48.725 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [167, 168, 160, 166, 162, 165, 160, 157, 167, 167, 167]}}}
+12:25:48.728 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [140, 139, 142, 146, 146, 149, 150, 156, 158, 159, 158]}}}
+12:25:48.731 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 165}}}
+12:25:48.737 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 168}}}
+12:25:48.777 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 166}}}
+12:25:48.779 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 150}}}
+12:25:57.785 - removal of process requested by cartControl that is not in the process list: cartControl
+12:26:05.722 - return processDict
+12:26:08.631 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 0, 'data': 0}}
+12:26:08.631 - process=('cartControl', {'processName': 'cartControl', 'running': True, 'lastUpdate': 1668338766.6286938}) stopped running
+12:26:08.632 - request from marvinData to remove process cartControl from process list
+12:26:08.632 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 1, 'data': 0}}
+12:26:08.633 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 2, 'data': 0}}
+12:26:08.633 - ULTRASONIC_SENSORS {'msgType': <SharedDataItems.ULTRASONIC_SENSORS: 53>, 'sender': 'cartControl', 'info': {'usSensorId': 3, 'data': 0}}
+12:26:08.634 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.635 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.636 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.636 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.637 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.637 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16)}}}
+12:26:08.638 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:26:08.638 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:26:08.639 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:26:08.639 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16)}}}
+12:26:10.725 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [168, 167, 164, 163, 165, 164, 160, 158, 160, 154, 155]}}}
+12:26:10.730 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [151, 149, 149, 148, 149, 147, 149, 148, 153, 150, 149]}}}
+12:26:10.734 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [164, 165, 166, 167, 165, 162, 161, 162, 163, 166, 166]}}}
+12:26:10.739 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [144, 142, 141, 142, 140, 139, 138, 142, 143, 143, 143]}}}
+12:26:10.776 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 4, 'data': {'sensorId': 4, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [167, 168, 160, 166, 162, 165, 160, 157, 167, 167, 167]}}}
+12:26:10.784 - SWIPING_IR_SENSORS {'msgType': <SharedDataItems.SWIPING_IR_SENSORS: 54>, 'sender': 'cartControl', 'info': {'irSensorId': 5, 'data': {'sensorId': 5, 'distance': array([0, 0, 0, 0, 0, 0], dtype=int16), 'referenceDistances': [140, 139, 142, 146, 146, 149, 150, 156, 158, 159, 158]}}}
+12:26:10.788 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 0, 'data': {'sensorId': 0, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 165}}}
+12:26:10.791 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 1, 'data': {'sensorId': 1, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 168}}}
+12:26:10.794 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 2, 'data': {'sensorId': 2, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 166}}}
+12:26:10.798 - STATIC_IR_SENSORS {'msgType': <SharedDataItems.STATIC_IR_SENSORS: 55>, 'sender': 'cartControl', 'info': {'irSensorId': 3, 'data': {'sensorId': 3, 'distance': array([0, 0, 0, 0], dtype=int16), 'referenceDistance': 150}}}
+12:26:19.825 - removal of process requested by cartControl that is not in the process list: cartControl

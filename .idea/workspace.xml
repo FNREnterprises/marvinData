@@ -19,50 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator-enh.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/markdown-navigator-enh.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/markdown-navigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/markdown-navigator.xml" afterDir="false" />
+    <list default="true" id="52f5c2bb-65d4-418e-af65-7cf8f08d727e" name="Default Changelist" comment="running version with marvinGui">
       <change beforePath="$PROJECT_DIR$/.idea/marvinData.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/marvinData.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log/marvinData.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/marvinData.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/marvinData.py" beforeDir="false" afterPath="$PROJECT_DIR$/marvinData.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/persistedServoPositions.json" beforeDir="false" afterPath="$PROJECT_DIR$/persistedServoPositions.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/cartcamImages/x2147_y-52_yaw359.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/cartcamImages/x2147_y-52_yaw359.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown/eyecamImages/x+2100_y-0100_yaw+360_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/cartcamImages/x2146_y-52_yaw0.0.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/cartcamImages/x2146_y-52_yaw0.0.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+000_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+010_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+020_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+340_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit+000.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rooms/unknown_depricated/eyecamImages/x+2100_y-0100_yaw+350_pit-020.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoFeedbackDefinitions.json" beforeDir="false" afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoFeedbackDefinitions.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/servoFeedbackDefinitions.json.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoStaticDefinitions.json" beforeDir="false" afterPath="$PROJECT_DIR$/servoStaticDefinitions.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoStaticDefinitions.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/servoStaticDefinitions.json.bak" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoTypeDefinitions.json" beforeDir="false" afterPath="$PROJECT_DIR$/servoTypeDefinitions.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servoTypeDefinitions.json.bak" beforeDir="false" afterPath="$PROJECT_DIR$/servoTypeDefinitions.json.bak" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,16 +56,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/marvin/InMoov/marvinglobal",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marvin/InMoov/marvinGui&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -114,7 +76,9 @@
       <updated>1605437819976</updated>
       <workItem from="1667735201320" duration="1659000" />
       <workItem from="1667740670731" duration="124000" />
-      <workItem from="1667740817882" duration="27077000" />
+      <workItem from="1667740817882" duration="28368000" />
+      <workItem from="1668073615064" duration="864000" />
+      <workItem from="1668336824486" duration="799000" />
     </task>
     <task id="LOCAL-00001" summary="working sensorTest">
       <created>1605612045838</created>
@@ -158,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626243985950</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="running version with marvinGui">
+      <created>1667998584573</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1667998584573</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,7 +155,8 @@
     <MESSAGE value="12/12/2020" />
     <MESSAGE value="07/01/2021" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="running version with marvinGui" />
+    <option name="LAST_COMMIT_MESSAGE" value="running version with marvinGui" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -215,6 +187,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/marvindata$marvinData.coverage" NAME="marvinData Coverage Results" MODIFIED="1667998384620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/marvindata$marvinData.coverage" NAME="marvinData Coverage Results" MODIFIED="1668073830599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/marvinData$marvinData.coverage" NAME="marvinData Coverage Results" MODIFIED="1668336829200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
